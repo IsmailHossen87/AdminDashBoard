@@ -21,15 +21,8 @@ export const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["AUTH"], 
     }),
     
-    // GET request to fetch division data
-    // loginData: builder.query({
-    //   query: (params) => ({
-    //     url: "/auth/login", 
-    //     method: "GET",   
-    //     params,           
-    //   }),
-    //   providesTags: ["AUTH"], 
-    // }),
+
+    
   }),
   overrideExisting: false, 
 });

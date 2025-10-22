@@ -7,25 +7,35 @@ import { Link, useNavigate } from "react-router";
 import { useLoginMutation } from "../redux/feature/authApi";
 import { toast } from "react-toastify";
 
-
 const Login: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<FieldValues>();
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-const [loginInfo] = useLoginMutation()
+  const [loginInfo] = useLoginMutation();
 
+  const onSubmit = async (data: any) => {
+    try {
+      setIsLoading(true);
+      const res = await loginInfo(data).unwrap();
 
-  const onSubmit = async(data: any) => {
-     const res = await loginInfo(data).unwrap();
-      if(res.success){
-          toast.success("Logged in Successfully")
-          navigate("/")
+      localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("refreshToken", res.data.refreshToken);
+
+      if (res.success) {
+        toast.success("Logged in Successfully");
+        navigate("/admin/dashboard");
       }
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Login failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen  from-indigo-100 via-white to-indigo-100">
+    <div className="flex justify-center items-center min-h-screen from-indigo-100 via-white to-indigo-100">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -40,8 +50,8 @@ const [loginInfo] = useLoginMutation()
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          {/* Email Field */}
-         <div>
+          {/* Contact Field */}
+          <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Contact
             </label>
@@ -52,9 +62,7 @@ const [loginInfo] = useLoginMutation()
               className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition duration-200"
             />
             {errors.contact && (
-              <p className="text-red-500 text-xs mt-1">
-                {String(errors.contact.message)}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{String(errors.contact.message)}</p>
             )}
           </div>
 
@@ -83,15 +91,40 @@ const [loginInfo] = useLoginMutation()
             )}
           </div>
 
-          {/* Submit Button */}
+          {/* Submit Button with Loading */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
             type="submit"
-            className="w-full flex items-center justify-center gap-2 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold shadow-md transition duration-300"
+            disabled={isLoading}
+            className={`w-full flex items-center justify-center gap-2 py-2 ${
+              isLoading ? "bg-indigo-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
+            } text-white rounded-lg font-semibold shadow-md transition duration-300`}
           >
-            <LogIn size={18} />
-            Login
+            {isLoading ? (
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                ></path>
+              </svg>
+            ) : (
+              <><LogIn size={18} /> Login</>
+            )}
           </motion.button>
 
           {/* Footer */}

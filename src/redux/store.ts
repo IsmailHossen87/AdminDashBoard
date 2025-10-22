@@ -1,13 +1,15 @@
-// src/redux/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import sidebarReducer from "./sidebarSlice"; 
-import apiReducer from "./apiSlice";  
+import { baseApi } from "./baseApi";  
 
 export const store = configureStore({
   reducer: {
     sidebar: sidebarReducer,
-    api: apiReducer,  
+    [baseApi.reducerPath]: baseApi.reducer,  
   },
+  // Adding the middleware for RTK Query
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(baseApi.middleware),  
 });
 
 // ✅ Export types
