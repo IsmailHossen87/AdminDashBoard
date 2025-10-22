@@ -6,24 +6,32 @@ export const authApi = baseApi.injectEndpoints({
     // POST request to add a division
     register: builder.mutation({
       query: (authData) => ({
-        url: "/auth/register",
+        url: "/users",
         method: "POST",
         body: authData, 
       }),
-      invalidatesTags: ["DIVISION"], 
+      invalidatesTags: ["AUTH"], 
+    }),
+    Login: builder.mutation({
+      query: (authData) => ({
+        url: "/auth/login",
+        method: "POST",
+        body: authData, 
+      }),
+      invalidatesTags: ["AUTH"], 
     }),
     
     // GET request to fetch division data
-    divisionData: builder.query({
-      query: (params) => ({
-        url: "/division", 
-        method: "GET",    // GET method
-        params,           
-      }),
-      providesTags: ["DIVISION"], 
-    }),
+    // loginData: builder.query({
+    //   query: (params) => ({
+    //     url: "/auth/login", 
+    //     method: "GET",   
+    //     params,           
+    //   }),
+    //   providesTags: ["AUTH"], 
+    // }),
   }),
   overrideExisting: false, 
 });
 
-export const { useRegisterMutation, useDivisionDataQuery } = authApi;
+export const { useRegisterMutation, useLoginMutation } = authApi;

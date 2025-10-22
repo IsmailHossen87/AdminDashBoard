@@ -1,9 +1,12 @@
+
 import { LayoutDashboard, Bell, LogOut, User, Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sidebarSlice";
 import type { RootState, AppDispatch } from "../redux/store";
+import { Link } from "react-router";
+import { VscSignIn } from "react-icons/vsc";
 
 interface MenuItem {
   name: string;
@@ -23,14 +26,14 @@ const AdminNavbar: React.FC = () => {
 
   return (
     <div
-      className={`${
-        isCollapsed ? "w-20" : "w-64"
-      } bg-gray-800 text-white h-screen flex flex-col transition-all duration-300 fixed`}
+      className={`${isCollapsed ? "w-20" : "w-64"} bg-gray-800 text-white h-screen flex flex-col transition-all duration-300 fixed`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-700">
         {!isCollapsed && (
-          <h1 className="text-xl font-bold text-indigo-400">AdminPanel</h1>
+         <Link to={"/"}>
+         
+          <h1 className="text-xl font-bold text-indigo-400">AdminPanel</h1></Link>
         )}
         <button
           onClick={() => dispatch(toggleSidebar())}
@@ -63,24 +66,10 @@ const AdminNavbar: React.FC = () => {
       </motion.div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-700 flex items-center justify-between">
-        {!isCollapsed && (
-          <div className="flex items-center space-x-3">
-            <img
-              src="https://i.pravatar.cc/40"
-              alt="admin"
-              className="h-8 w-8 rounded-full"
-            />
-            <div>
-              <p className="text-sm font-semibold">Admin</p>
-              <p className="text-xs text-gray-400">Super Admin</p>
-            </div>
-          </div>
-        )}
-        <button className="text-red-400 hover:text-red-500">
-          <LogOut size={20} />
-        </button>
-      </div>
+      <div className="p-4  border-t border-gray-700 flex gap-7 items-center ">
+     <Link to={"/signUp"}>Sign Up  </Link>
+      <VscSignIn />
+       </div>
     </div>
   );
 };
