@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { LayoutDashboard, Bell, LogOut, User, Menu } from "lucide-react";
+import { LayoutDashboard, Bell, LogOut, User, Menu, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sidebarSlice";
 import { VscSignIn } from "react-icons/vsc";
 import type { RootState } from "../redux/store";
-
+import { MdBrandingWatermark, MdWorkHistory } from "react-icons/md";
 
 interface MenuItem {
   name: string;
@@ -21,12 +21,13 @@ const AdminNavbar: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const menuItems: MenuItem[] = [
+    { name: "Profile", icon: User, path: "/admin/profile" },
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
     { name: "CarModel", icon: Bell, path: "/admin/carmodel" },
-    { name: "Profile", icon: User, path: "/admin/profile" },
     { name: "CreateAdmin", icon: User, path: "/admin/createAdmin" },
-    { name: "Message", icon: User, path: "/admin/message" },
-    { name: "Brand", icon: User, path: "/admin/brand" },
+    { name: "Message", icon: MessageCircle, path: "/admin/message" },
+    { name: "Brand", icon: MdBrandingWatermark, path: "/admin/brand" },
+    { name: "WorkShop", icon: MdWorkHistory, path: "/admin/workShop" },
   ];
 
   const checkLoginStatus = () => {
@@ -35,12 +36,12 @@ const AdminNavbar: React.FC = () => {
   };
 
   useEffect(() => {
-    checkLoginStatus(); 
+    checkLoginStatus();
     const handleStorageChange = () => {
       checkLoginStatus();
     };
 
-    window.addEventListener("storage", handleStorageChange); 
+    window.addEventListener("storage", handleStorageChange);
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
@@ -49,12 +50,14 @@ const AdminNavbar: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    setIsLoggedIn(false); 
+    setIsLoggedIn(false);
   };
 
   return (
     <div
-      className={`${isCollapsed ? "w-20" : "w-64"} bg-[#1771B7] text-white h-screen flex flex-col transition-all duration-300 fixed`}
+      className={`${
+        isCollapsed ? "w-20" : "w-64"
+      } bg-[#1771B7] text-white h-screen flex flex-col transition-all duration-300 fixed`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-700">
@@ -104,7 +107,7 @@ const AdminNavbar: React.FC = () => {
                   alt="admin"
                   className="h-8 w-8 rounded-full"
                 />
-                <div >
+                <div>
                   <p className="text-sm font-semibold">Admin</p>
                   <p className="text-xs text-gray-400">Super Admin</p>
                 </div>
@@ -118,10 +121,11 @@ const AdminNavbar: React.FC = () => {
             </button>
           </div>
         ) : (
-          <Link to="/signUp" className="flex px-4 rounded-xl py-2 items-center bg-amber-700 justify-between">
-            <p className=" font-semibold">
-              Sign Up
-            </p>
+          <Link
+            to="/signUp"
+            className="flex px-4 rounded-xl py-2 items-center bg-amber-700 justify-between"
+          >
+            <p className=" font-semibold">Sign Up</p>
             <VscSignIn size={22} className="" />
           </Link>
         )}

@@ -47,7 +47,15 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       providesTags: ["ADMIN"],
     }),
-    // ✅ All Brand - Contries
+    // ✅ All WorkShop
+    allWorkShop: builder.query({
+      query: () => ({
+        url: "/workshops",
+        method: "GET",
+      }),
+      providesTags: ["ADMIN"],
+    }),
+    // ✅ All Brand 
     allBrand: builder.query({
       query: () => ({
         url: "/car-brands",
@@ -111,6 +119,7 @@ export const {
   useCreateCarModelMutation,
   useCreateAdminMutation,
   useAllCarModelQuery,
+  useAllWorkShopQuery,
   useDeleteBrandMutation,
   useAllMessageQuery,
   useDeleteMessageMutation,

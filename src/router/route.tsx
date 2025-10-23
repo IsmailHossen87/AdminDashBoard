@@ -10,6 +10,7 @@ import CreateCarBrand from "../Page/CARBRAND/createCar";
 import CarModelTable from "../Page/CARMODEL/carModelTable";
 import CreateCarModel from "../Page/CARMODEL/CreateCarModel";
 import CarBrandDetail from "../Page/CARBRAND/Details";
+import WorkShop from "../Page/workShop/workShop";
 
 const Routes = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const Routes = createBrowserRouter([
        {
         path: "admin/details/:id",
         element: <CarBrandDetail/>,
+      },
+       {
+        path: "admin/workShop",
+        element: <WorkShop/>,
       },
        {
         path: "signUp",
