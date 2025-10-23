@@ -22,7 +22,7 @@ const AdminNavbar: React.FC = () => {
 
   const menuItems: MenuItem[] = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
-    { name: "Notifications", icon: Bell, path: "/admin/notifications" },
+    { name: "CarModel", icon: Bell, path: "/admin/carmodel" },
     { name: "Profile", icon: User, path: "/admin/profile" },
     { name: "CreateAdmin", icon: User, path: "/admin/createAdmin" },
     { name: "Message", icon: User, path: "/admin/message" },

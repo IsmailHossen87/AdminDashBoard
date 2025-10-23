@@ -1,9 +1,15 @@
 import { Loader2, Users, Calendar, DollarSign, Bookmark, Mail, Phone, User } from "lucide-react";
-import { useGetDashBoardQuery, usePersonalDataQuery } from "../redux/feature/adminApi";
+import { useGetDashBoardQuery } from "../redux/feature/adminApi";
+import { useDeleteAdminMutation, useGetAllAdminQuery } from "../redux/feature/authApi";
+import { FiDelete } from "react-icons/fi";
+import { toast } from "react-toastify";
+import { BsTrash } from "react-icons/bs";
+
 
 const Dashboard = () => {
   const { data: DashBoard, isLoading, isError } = useGetDashBoardQuery(undefined);
-  const { data: PersonalData } = usePersonalDataQuery(undefined);
+  const { data: PersonalData } = useGetAllAdminQuery(undefined);
+  const [deleteMutation] = useDeleteAdminMutation()
 
   if (isLoading) {
     return (
@@ -22,7 +28,19 @@ const Dashboard = () => {
     );
   }
 
-  const { totalAdmins, period, subscriptions } = DashBoard.data;
+  const { totalAdmins, period, subscriptions } = DashBoard.data; 
+
+  const handleDeleteAdmin = async (adminId: string) => {
+    try {
+      await deleteMutation(adminId).unwrap();
+      toast.success("Admin deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete admin");
+    }
+  };
+
+
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -121,7 +139,8 @@ const Dashboard = () => {
               key={admin._id || index}
               className="bg-[#FFCB77] rounded-2xl shadow-md p-6 hover:shadow-xl transition"
             >
-              <div className="flex items-center gap-4 mb-4">
+             <div className="flex justify-between ">
+               <div className="flex items-center gap-4 mb-4">
                 <div className="p-3 bg-indigo-100 rounded-full text-indigo-600">
                   <User size={26} />
                 </div>
@@ -132,6 +151,16 @@ const Dashboard = () => {
                   <p className="text-sm text-gray-500">Admin ID: {admin._id.slice(0, 8)}...</p>
                 </div>
               </div>
+              {/* delete icon */}
+              <div>
+                 <button
+                  onClick={() => handleDeleteAdmin(admin._id)}
+                  className="ml-auto text-red-600 hover:text-red-800"
+                >
+                  <BsTrash size={18} />
+                </button>
+              </div>
+             </div>
 
               <div className="text-gray-700 text-sm space-y-2">
                 <p className="flex items-center gap-2">

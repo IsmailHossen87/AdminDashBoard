@@ -5,9 +5,11 @@ import Register from "../Page/Register";
 import Login from "../Page/Login";
 import CreateAdmin from "../Page/CreateAdmin";
 import MessageList from "../Page/Message";
-import CarBrandComponent from "../Page/Brand";
-import CarBrandDetail from "../Page/Details";
-import CreateCarBrand from "../Page/createCar";
+import CarBrandComponent from "../Page/CARBRAND/Brand";
+import CreateCarBrand from "../Page/CARBRAND/createCar";
+import CarModelTable from "../Page/CARMODEL/carModelTable";
+import CreateCarModel from "../Page/CARMODEL/CreateCarModel";
+import CarBrandDetail from "../Page/CARBRAND/Details";
 
 const Routes = createBrowserRouter([
   {
@@ -16,11 +18,15 @@ const Routes = createBrowserRouter([
     // errorElement: <Error />,
     children: [
        {
-        path: "admin/dashboard",
+        index:true,
         element: <Dashboard/>,
       },
        {
         path: "admin/profile",
+        element: <Dashboard/>,
+      },
+       {
+        path: "admin/dashboard",
         element: <Dashboard/>,
       },
        {
@@ -34,6 +40,10 @@ const Routes = createBrowserRouter([
        {
         path: "admin/brand",
         element: <CarBrandComponent/>,
+      },
+       {
+        path: "admin/carmodel",
+        element: <CarModelTable/>,
       },
        {
         path: "admin/details/:id",
@@ -50,6 +60,10 @@ const Routes = createBrowserRouter([
        {
         path: "create",
         element: <CreateCarBrand/>,
+      },
+       {
+        path: "model",
+        element: <CreateCarModel/>,
       },
       
     ],

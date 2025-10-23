@@ -11,13 +11,23 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["ADMIN"],
     }),
+    // CREATE BRAND
     createCarBrand: builder.mutation({
       query: (authData) => ({
-        url: "/car-brand-countries",
+        url: "/images",
         method: "POST",
         body: authData,
       }),
       invalidatesTags: ["ADMIN"],
+    }),
+    // CREATE MODEL
+    createCarModel: builder.mutation({
+      query: (body) => ({
+        url: "/car-models",
+        method: "POST",
+        body
+      }),
+       invalidatesTags: ["CARS"],
     }),
 
     // ✅ Dashboard data
@@ -37,13 +47,21 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       providesTags: ["ADMIN"],
     }),
-    // ✅ All Brand
+    // ✅ All Brand - Contries
     allBrand: builder.query({
       query: () => ({
-        url: "/car-brand-countries/unpaginated",
+        url: "/car-brands",
         method: "GET",
       }),
       providesTags: ["ADMIN"],
+    }),
+    // ✅ All CarModel
+    allCarModel: builder.query({
+      query: () => ({
+        url: "car-models/unpaginated",
+        method: "GET",
+      }),
+      providesTags: ["CARS"],
     }),
     // Brand
     // ✅ Single Brand fetch
@@ -61,29 +79,27 @@ export const adminAPI = baseApi.injectEndpoints({
         url: `/message/${messageId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["ADMIN"], 
+      invalidatesTags: ["ADMIN"],
     }),
-    // ✅ Delete Message
+    // ✅ Delete Car Brand
     deleteBrand: builder.mutation({
       query: (messageId: string) => ({
-        url: `/brand/${messageId}`,
+        url: `/car-brands/${messageId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["ADMIN"], 
+      invalidatesTags: ["ADMIN"],
+    }),
+    // ✅ Delete Car Model
+    deletecarModel: builder.mutation({
+      query: (messageId: string) => ({
+        url: `/car-models/${messageId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["CARS"],
     }),
 
-    // ✅ Personal admin data
-    personalData: builder.query({
-      query: (params) => ({
-        url: "/admin/get-admin",
-        method: "GET",
-        params,
-      }),
-      providesTags: ["ADMIN"],
-    }),
   }),
-  // CreateCar
-  
+
 
   overrideExisting: false,
 });
@@ -92,11 +108,13 @@ export const adminAPI = baseApi.injectEndpoints({
 export const {
   useGetDashBoardQuery,
   useCreateCarBrandMutation,
+  useCreateCarModelMutation,
   useCreateAdminMutation,
+  useAllCarModelQuery,
   useDeleteBrandMutation,
-  usePersonalDataQuery,
   useAllMessageQuery,
   useDeleteMessageMutation,
+  useDeletecarModelMutation,
   useAllBrandQuery,
-  useGetBrandByIdQuery
+  useGetBrandByIdQuery,
 } = adminAPI;
