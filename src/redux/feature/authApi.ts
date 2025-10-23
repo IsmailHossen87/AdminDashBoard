@@ -21,10 +21,26 @@ export const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["AUTH"], 
     }),
     
-
+    // ✅ Personal admin data
+    getAllAdmin: builder.query({
+      query: (params) => ({
+        url: "/admin/get-admin",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["ADMIN"],
+    }),
+    // DELETE ADMIN
+     deleteAdmin: builder.mutation({
+      query: (adminId) => ({
+        url: `/admin/${adminId}`, 
+        method: "DELETE",
+      }),
+      invalidatesTags: ['ADMIN'] 
+    }),
     
   }),
   overrideExisting: false, 
 });
 
-export const { useRegisterMutation, useLoginMutation } = authApi;
+export const { useRegisterMutation,useGetAllAdminQuery, useLoginMutation,useDeleteAdminMutation } = authApi;

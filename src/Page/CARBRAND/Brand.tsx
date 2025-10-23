@@ -1,6 +1,5 @@
-import React, { useState } from "react";
 import { Loader2 } from "lucide-react"; // Loading spinner icon
-import { useAllBrandQuery, useDeleteBrandMutation,  } from "../redux/feature/adminApi";
+import { useAllBrandQuery, useDeleteBrandMutation,  } from "../../redux/feature/adminApi";
 import { motion } from "framer-motion"; // Import motion from framer-motion
 import { Link } from "react-router-dom";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
@@ -10,6 +9,8 @@ import { FiDelete } from "react-icons/fi";
 const CarBrandComponent: React.FC = () => {
   const { data, isLoading, isError } = useAllBrandQuery(undefined);
   const [deleteCarBrand] = useDeleteBrandMutation();
+
+  console.log(data);
 
   const handleDelete = async (brandId: string) => {
     try {
@@ -61,7 +62,7 @@ const CarBrandComponent: React.FC = () => {
 
       {/* Cards Display */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        {data?.data?.map((brand: any) => (
+        {data?.data?.result?.map((brand: any) => (
           <motion.div
             key={brand._id}
             className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition relative"
@@ -86,6 +87,7 @@ const CarBrandComponent: React.FC = () => {
           </motion.div>
         ))}
       </div>
+      
     </div>
   );
 };
