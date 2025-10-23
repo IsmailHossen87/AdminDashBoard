@@ -1,15 +1,13 @@
 import { Loader2, Users, Calendar, DollarSign, Bookmark, Mail, Phone, User } from "lucide-react";
 import { useGetDashBoardQuery } from "../redux/feature/adminApi";
-import { useDeleteAdminMutation, useGetAllAdminQuery } from "../redux/feature/authApi";
-import { FiDelete } from "react-icons/fi";
-import { toast } from "react-toastify";
-import { BsTrash } from "react-icons/bs";
+import {  useGetAllAdminQuery } from "../redux/feature/authApi";
+
 
 
 const Dashboard = () => {
   const { data: DashBoard, isLoading, isError } = useGetDashBoardQuery(undefined);
   const { data: PersonalData } = useGetAllAdminQuery(undefined);
-  const [deleteMutation] = useDeleteAdminMutation()
+
 
   if (isLoading) {
     return (
@@ -29,17 +27,6 @@ const Dashboard = () => {
   }
 
   const { totalAdmins, period, subscriptions } = DashBoard.data; 
-
-  const handleDeleteAdmin = async (adminId: string) => {
-    try {
-      await deleteMutation(adminId).unwrap();
-      toast.success("Admin deleted successfully");
-    } catch (error) {
-      toast.error("Failed to delete admin");
-    }
-  };
-
-
 
 
   return (
@@ -151,15 +138,7 @@ const Dashboard = () => {
                   <p className="text-sm text-gray-500">Admin ID: {admin._id.slice(0, 8)}...</p>
                 </div>
               </div>
-              {/* delete icon */}
-              <div>
-                 <button
-                  onClick={() => handleDeleteAdmin(admin._id)}
-                  className="ml-auto text-red-600 hover:text-red-800"
-                >
-                  <BsTrash size={18} />
-                </button>
-              </div>
+
              </div>
 
               <div className="text-gray-700 text-sm space-y-2">
