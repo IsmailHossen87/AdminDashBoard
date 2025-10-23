@@ -1,13 +1,53 @@
 import React, { useState } from "react";
-import { Loader2, MapPin, Phone, Building2, Calendar, CreditCard, Clock, CheckCircle, XCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Loader2,
+  MapPin,
+  Phone,
+  Building2,
+  Calendar,
+  CreditCard,
+  Clock,
+  CheckCircle,
+  XCircle,
+  ChevronLeft,
+  ChevronRight,
+  Trash2,
+  Eye,
+  EyeIcon,
+} from "lucide-react";
 import { toast } from "react-toastify";
-import { useAllWorkShopQuery } from "../../redux/feature/adminApi";
+import {
+  useAllWorkShopQuery,
+  useDeleteWorkShopMutation,
+} from "../../redux/feature/adminApi";
+import { Link, useNavigate } from "react-router";
+import { MdOutlineCreateNewFolder } from "react-icons/md";
 
 const WorkShop = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [deleteWorkShop, { isLoading: isDeleting }] =
+    useDeleteWorkShopMutation();
 
-  const { data: WorkShopData, isLoading, isError } = useAllWorkShopQuery({
+  // Delete function
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this workshop?"))
+      return;
+
+    try {
+      await deleteWorkShop(id).unwrap();
+      toast.success("Workshop deleted successfully!");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.data?.message || "Failed to delete workshop");
+    }
+  };
+
+  const {
+    data: WorkShopData,
+    isLoading,
+    isError,
+  } = useAllWorkShopQuery({
     page: currentPage,
     limit: limit,
   });
@@ -47,7 +87,7 @@ const WorkShop = () => {
   const getPageNumbers = () => {
     const pages = [];
     const maxVisible = 5;
-    
+
     if (meta.totalPage <= maxVisible) {
       for (let i = 1; i <= meta.totalPage; i++) {
         pages.push(i);
@@ -60,7 +100,8 @@ const WorkShop = () => {
       } else if (currentPage >= meta.totalPage - 2) {
         pages.push(1);
         pages.push("...");
-        for (let i = meta.totalPage - 3; i <= meta.totalPage; i++) pages.push(i);
+        for (let i = meta.totalPage - 3; i <= meta.totalPage; i++)
+          pages.push(i);
       } else {
         pages.push(1);
         pages.push("...");
@@ -71,7 +112,7 @@ const WorkShop = () => {
         pages.push(meta.totalPage);
       }
     }
-    
+
     return pages;
   };
 
@@ -85,7 +126,6 @@ const WorkShop = () => {
             Total {meta.total} workshops registered on the platform
           </p>
         </div>
-        
       </div>
 
       {/* Summary Cards */}
@@ -131,7 +171,10 @@ const WorkShop = () => {
           <div>
             <p className="text-white text-sm">Total Invoices</p>
             <h2 className="text-2xl font-bold text-white">
-              {result.reduce((sum: number, w: any) => sum + w.generatedInvoiceCount, 0)}
+              {result.reduce(
+                (sum: number, w: any) => sum + w.generatedInvoiceCount,
+                0
+              )}
             </h2>
           </div>
         </div>
@@ -140,103 +183,137 @@ const WorkShop = () => {
       {/* Workshop Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {result.map((workshop: any) => (
-          <div
-            key={workshop._id}
-            className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition"
-          >
-            {/* Header with Image */}
-            <div className="flex items-start gap-4 mb-4">
-              {workshop.image ? (
-                <img
-                  src={workshop.image}
-                  alt={workshop.workshopNameEnglish}
-                  className="w-16 h-16 rounded-lg object-cover"
-                />
-              ) : (
-                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                  {workshop.workshopNameEnglish.charAt(0)}
+          <Link to={`/workShopDetails/${workshop._id}`}>
+            <div
+              key={workshop._id}
+              className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition"
+            >
+              {/* Header with Image */}
+              <div className="flex items-start gap-4 mb-4 relative">
+                {/* Workshop Image / Initial */}
+                {workshop.image ? (
+                  <img
+                    src={workshop.image}
+                    alt={workshop.workshopNameEnglish}
+                    className="w-16 h-16 rounded-lg object-cover"
+                  />
+                ) : (
+                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                    {workshop.workshopNameEnglish.charAt(0)}
+                  </div>
+                )}
+
+                {/* Workshop Info */}
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {workshop.workshopNameEnglish}
+                  </h3>
+                  <p className="text-sm text-gray-500 arabic-text">
+                    {workshop.workshopNameArabic}
+                  </p>
+
+                  <div className="flex items-center gap-2 mt-1">
+                    {workshop.subscribedPackage ? (
+                      <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full flex items-center gap-1">
+                        <CheckCircle size={12} /> Active
+                      </span>
+                    ) : (
+                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full flex items-center gap-1">
+                        <XCircle size={12} /> No Subscription
+                      </span>
+                    )}
+                    {workshop.isAvailableMobileWorkshop && (
+                      <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">
+                        Mobile
+                      </span>
+                    )}
+                  </div>
                 </div>
-              )}
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {workshop.workshopNameEnglish}
-                </h3>
-                <p className="text-sm text-gray-500 arabic-text">
-                  {workshop.workshopNameArabic}
-                </p>
-                <div className="flex items-center gap-2 mt-1">
-                  {workshop.subscribedPackage ? (
-                    <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full flex items-center gap-1">
-                      <CheckCircle size={12} /> Active
+
+                <div className="flex relative">
+                  {/* Delete Button */}
+                  <button
+                    onClick={() => handleDelete(workshop._id)}
+                    disabled={isDeleting}
+                    className="absolute top-0 right-0 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+                    title="Delete Workshop"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+
+                  {/* Edit Button */}
+                  <Link
+                    to={`/UpdateWorkShop/${workshop._id}`}
+                    className="absolute top-0 right-12 p-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 transition"
+                    title="Edit Workshop"
+                  >
+                    <Eye size={16} />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Details */}
+              <div className="space-y-3 text-sm text-gray-700">
+                <div className="flex items-start gap-2">
+                  <MapPin
+                    size={16}
+                    className="text-indigo-600 mt-1 flex-shrink-0"
+                  />
+                  <span>{workshop.address}</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Building2 size={16} className="text-green-600" />
+                  <span>UNN: {workshop.unn}</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <CreditCard size={16} className="text-purple-600" />
+                  <span className="text-xs">VAT: {workshop.taxVatNumber}</span>
+                </div>
+
+                {/* Working Schedule */}
+                <div className="bg-gray-50 rounded-lg p-3 mt-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Clock size={14} className="text-indigo-600" />
+                    <span className="text-xs font-semibold">
+                      Regular Schedule
                     </span>
-                  ) : (
-                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full flex items-center gap-1">
-                      <XCircle size={12} /> No Subscription
-                    </span>
-                  )}
-                  {workshop.isAvailableMobileWorkshop && (
-                    <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">
-                      Mobile
-                    </span>
-                  )}
+                  </div>
+                  <p className="text-xs text-gray-600">
+                    {workshop.regularWorkingSchedule.startDay} -{" "}
+                    {workshop.regularWorkingSchedule.endDay}
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    {workshop.regularWorkingSchedule.startTime} -{" "}
+                    {workshop.regularWorkingSchedule.endTime}
+                  </p>
+                </div>
+
+                {/* Stats */}
+                <div className="flex justify-between items-center pt-3 border-t">
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">Invoices</p>
+                    <p className="text-lg font-bold text-indigo-600">
+                      {workshop.generatedInvoiceCount}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">Trial Used</p>
+                    <p className="text-lg font-bold text-purple-600">
+                      {workshop.isUsedTrial ? "Yes" : "No"}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">Created</p>
+                    <p className="text-xs font-medium text-gray-600">
+                      {new Date(workshop.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-
-            {/* Details */}
-            <div className="space-y-3 text-sm text-gray-700">
-              <div className="flex items-start gap-2">
-                <MapPin size={16} className="text-indigo-600 mt-1 flex-shrink-0" />
-                <span>{workshop.address}</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Building2 size={16} className="text-green-600" />
-                <span>UNN: {workshop.unn}</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <CreditCard size={16} className="text-purple-600" />
-                <span className="text-xs">VAT: {workshop.taxVatNumber}</span>
-              </div>
-
-              {/* Working Schedule */}
-              <div className="bg-gray-50 rounded-lg p-3 mt-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <Clock size={14} className="text-indigo-600" />
-                  <span className="text-xs font-semibold">Regular Schedule</span>
-                </div>
-                <p className="text-xs text-gray-600">
-                  {workshop.regularWorkingSchedule.startDay} - {workshop.regularWorkingSchedule.endDay}
-                </p>
-                <p className="text-xs text-gray-600">
-                  {workshop.regularWorkingSchedule.startTime} - {workshop.regularWorkingSchedule.endTime}
-                </p>
-              </div>
-
-              {/* Stats */}
-              <div className="flex justify-between items-center pt-3 border-t">
-                <div className="text-center">
-                  <p className="text-xs text-gray-500">Invoices</p>
-                  <p className="text-lg font-bold text-indigo-600">
-                    {workshop.generatedInvoiceCount}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs text-gray-500">Trial Used</p>
-                  <p className="text-lg font-bold text-purple-600">
-                    {workshop.isUsedTrial ? "Yes" : "No"}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs text-gray-500">Created</p>
-                  <p className="text-xs font-medium text-gray-600">
-                    {new Date(workshop.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
 
@@ -245,66 +322,73 @@ const WorkShop = () => {
         <div className="flex flex-col items-end gap-4 bg-white rounded-xl shadow-md p-6">
           {/* Page Info */}
           <div className="text-sm text-gray-600">
-            Showing <span className="font-semibold text-gray-800">{((currentPage - 1) * limit) + 1}</span> to{" "}
+            Showing{" "}
+            <span className="font-semibold text-gray-800">
+              {(currentPage - 1) * limit + 1}
+            </span>{" "}
+            to{" "}
             <span className="font-semibold text-gray-800">
               {Math.min(currentPage * limit, meta.total)}
             </span>{" "}
-            of <span className="font-semibold text-gray-800">{meta.total}</span> workshops
+            of <span className="font-semibold text-gray-800">{meta.total}</span>{" "}
+            workshops
           </div>
 
           {/* Pagination Controls */}
           <div className="flex items-center gap-2">
-          {/* Previous Button */}
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className={`p-2 rounded-lg flex items-center gap-1 transition ${
-              currentPage === 1
-                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
-            }`}
-          >
-            <ChevronLeft size={18} />
-            <span className="hidden sm:inline text-sm">Previous</span>
-          </button>
+            {/* Previous Button */}
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`p-2 rounded-lg flex items-center gap-1 transition ${
+                currentPage === 1
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+              }`}
+            >
+              <ChevronLeft size={18} />
+              <span className="hidden sm:inline text-sm">Previous</span>
+            </button>
 
-          {/* Page Numbers */}
-          <div className="flex items-center gap-1">
-            {getPageNumbers().map((page, index) => (
-              <button
-                key={index}
-                onClick={() => typeof page === "number" && handlePageChange(page)}
-                disabled={page === "..."}
-                className={`min-w-[40px] h-10 rounded-lg text-sm font-medium transition ${
-                  page === currentPage
-                    ? "bg-indigo-600 text-white"
-                    : page === "..."
-                    ? "bg-transparent text-gray-400 cursor-default"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
+            {/* Page Numbers */}
+            <div className="flex items-center gap-1">
+              {getPageNumbers().map((page, index) => (
+                <button
+                  key={index}
+                  onClick={() =>
+                    typeof page === "number" && handlePageChange(page)
+                  }
+                  disabled={page === "..."}
+                  className={`min-w-[40px] h-10 rounded-lg text-sm font-medium transition ${
+                    page === currentPage
+                      ? "bg-indigo-600 text-white"
+                      : page === "..."
+                      ? "bg-transparent text-gray-400 cursor-default"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            {/* Next Button */}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === meta.totalPage}
+              className={`p-2 rounded-lg flex items-center gap-1 transition ${
+                currentPage === meta.totalPage
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+              }`}
+            >
+              <span className="hidden sm:inline text-sm">Next</span>
+              <ChevronRight size={18} />
+            </button>
           </div>
-
-          {/* Next Button */}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === meta.totalPage}
-            className={`p-2 rounded-lg flex items-center gap-1 transition ${
-              currentPage === meta.totalPage
-                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
-            }`}
-          >
-            <span className="hidden sm:inline text-sm">Next</span>
-            <ChevronRight size={18} />
-          </button>
         </div>
       </div>
-      </div>
-     {/* ---------- */}
+      {/* ---------- */}
     </div>
   );
 };

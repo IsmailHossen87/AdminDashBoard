@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
-import { useAllCarModelQuery, useDeletecarModelMutation } from "../../redux/feature/adminApi";
+import {
+  useAllCarModelQuery,
+  useDeletecarModelMutation,
+} from "../../redux/feature/adminApi";
 import { FiDelete, FiEdit } from "react-icons/fi";
 import { Button, Tooltip } from "antd";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
@@ -17,11 +20,11 @@ interface CarModel {
 
 const CarModelTable = () => {
   const { data, error, isLoading } = useAllCarModelQuery(undefined);
-    const [deleteCarBrand] = useDeletecarModelMutation();
+  const [deleteCarBrand] = useDeletecarModelMutation();
 
   const handleDelete = (id: string) => {
-    deleteCarBrand(id)
-    toast.success("Successfully Delete the model")
+    deleteCarBrand(id);
+    toast.success("Successfully Delete the model");
   };
 
   if (isLoading)
@@ -41,18 +44,17 @@ const CarModelTable = () => {
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="bg-white/60 backdrop-blur-lg border border-gray-100 shadow-xl rounded-2xl p-6 transition-all hover:shadow-2xl">
-       <div className="flex justify-between">
-         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
-          🚗 Car Models Management
-        </h2>
-      
-        <Link to="/model">
-                    <button className="px-6 flex justify-between items-center gap-2 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
-                      Create Car Model <MdOutlineCreateNewFolder />
-                    </button>
-                  </Link>
-       </div>
-  
+        <div className="flex justify-between">
+          <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
+            🚗 Car Models Management
+          </h2>
+
+          <Link to="/model">
+            <button className="px-6 flex justify-between items-center gap-2 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+              Create Car Model <MdOutlineCreateNewFolder />
+            </button>
+          </Link>
+        </div>
 
         {data?.data?.length === 0 ? (
           <div className="text-center text-gray-500 font-medium py-8">
@@ -66,7 +68,9 @@ const CarModelTable = () => {
                   <th className="px-5 py-3 text-left rounded-tl-lg">Title</th>
                   <th className="px-5 py-3 text-left">Brand</th>
                   <th className="px-5 py-3 text-left">Created At</th>
-                  <th className="px-5 py-3 text-center rounded-tr-lg">Actions</th>
+                  <th className="px-5 py-3 text-center rounded-tr-lg">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>

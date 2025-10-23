@@ -2,6 +2,7 @@ import { baseApi } from "../baseApi";
 
 export const adminAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+
     // ✅ Create Admin
     createAdmin: builder.mutation({
       query: (authData) => ({
@@ -11,23 +12,34 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["ADMIN"],
     }),
-    // CREATE BRAND
+
+    // // ✅ Create Car Brand
+    // createCarBrand: builder.mutation({
+    //   query: (body) => ({
+    //     url: "/image",
+    //     method: "POST",
+    //     body,
+    //   }),
+    //   invalidatesTags: ["ADMIN"],
+    // }),
+    // ✅ Create Car Brand
     createCarBrand: builder.mutation({
-      query: (authData) => ({
-        url: "/images",
+      query: (body) => ({
+        url: "/car-brands",
         method: "POST",
-        body: authData,
+        body,
       }),
       invalidatesTags: ["ADMIN"],
     }),
-    // CREATE MODEL
+
+    // ✅ Create Car Model
     createCarModel: builder.mutation({
       query: (body) => ({
         url: "/car-models",
         method: "POST",
-        body
+        body,
       }),
-       invalidatesTags: ["CARS"],
+      invalidatesTags: ["CARS"],
     }),
 
     // ✅ Dashboard data
@@ -47,15 +59,17 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       providesTags: ["ADMIN"],
     }),
-    // ✅ All WorkShop
+
+    // ✅ All Workshops
     allWorkShop: builder.query({
       query: () => ({
         url: "/workshops",
         method: "GET",
       }),
-      providesTags: ["ADMIN"],
+      providesTags: ["WORKSHOP"],
     }),
-    // ✅ All Brand 
+
+    // ✅ All Brands
     allBrand: builder.query({
       query: () => ({
         url: "/car-brands",
@@ -63,7 +77,8 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       providesTags: ["ADMIN"],
     }),
-    // ✅ All CarModel
+
+    // ✅ All Car Models
     allCarModel: builder.query({
       query: () => ({
         url: "car-models/unpaginated",
@@ -71,14 +86,50 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       providesTags: ["CARS"],
     }),
-    // Brand
-    // ✅ Single Brand fetch
+
+    // ✅ All Cars
+    allCar: builder.query({
+      query: () => ({
+        url: "cars",
+        method: "GET",
+      }),
+      providesTags: ["CAR"],
+    }),
+    // ✅ All Country
+    allCountry: builder.query({
+      query: () => ({
+        url: "car-brand-countries/unpaginated",
+        method: "GET",
+      }),
+      providesTags: ["COUNTRY"],
+    }),
+
+// ---------------------------------------
+    // ✅ Single Brand Fetch
     getBrandById: builder.query({
       query: (brandId: string) => ({
         url: `/car-brand-countries/${brandId}`,
         method: "GET",
       }),
       providesTags: ["ADMIN"],
+    }),
+
+    // ✅ Single Workshop Fetch
+    getSingleWorkShop: builder.query({
+      query: (workShopId: string) => ({
+        url: `/workshops/${workShopId}`,
+        method: "GET",
+      }),
+      providesTags: ["WORKSHOP"],
+    }),
+
+    // ✅ Single Car Fetch
+    getSingleCar: builder.query({
+      query: (carId: string) => ({
+        url: `/cars/${carId}`,
+        method: "GET",
+      }),
+      providesTags: ["CAR"],
     }),
 
     // ✅ Delete Message
@@ -89,41 +140,84 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["ADMIN"],
     }),
+
     // ✅ Delete Car Brand
     deleteBrand: builder.mutation({
-      query: (messageId: string) => ({
-        url: `/car-brands/${messageId}`,
+      query: (brandId: string) => ({
+        url: `/car-brands/${brandId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["ADMIN"],
     }),
+
     // ✅ Delete Car Model
     deletecarModel: builder.mutation({
-      query: (messageId: string) => ({
-        url: `/car-models/${messageId}`,
+      query: (modelId: string) => ({
+        url: `/car-models/${modelId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["CARS"],
     }),
 
-  }),
+    // ✅ Delete Workshop
+    deleteWorkShop: builder.mutation({
+      query: (id: string) => ({
+        url: `/workshops/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["WORKSHOP"],
+    }),
 
+    // ✅ Delete Car
+    deleteCar: builder.mutation({
+      query: (id: string) => ({
+        url: `/cars/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["CAR"],
+    }),
+
+    // ✅ Update Workshop
+    updateWorkShop: builder.mutation({
+      query: ({ id, payload }: { id: string; payload: any }) => ({
+        url: `/workshops/${id}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["WORKSHOP"],
+    }),
+  }),
 
   overrideExisting: false,
 });
 
-// ✅ Export Hooks
 export const {
-  useGetDashBoardQuery,
+  // ✅ Create
+  useCreateAdminMutation,
   useCreateCarBrandMutation,
   useCreateCarModelMutation,
-  useCreateAdminMutation,
+
+  // ✅ Get All
+  useGetDashBoardQuery,
+  useAllBrandQuery,
   useAllCarModelQuery,
   useAllWorkShopQuery,
-  useDeleteBrandMutation,
   useAllMessageQuery,
-  useDeleteMessageMutation,
-  useDeletecarModelMutation,
-  useAllBrandQuery,
+  useAllCarQuery,
+  useAllCountryQuery,
+
+  // ✅ Get Single
   useGetBrandByIdQuery,
+  useGetSingleWorkShopQuery,
+  useGetSingleCarQuery,
+
+  // ✅ Delete
+  useDeleteMessageMutation,
+  useDeleteBrandMutation,
+  useDeletecarModelMutation,
+  useDeleteWorkShopMutation,
+  useDeleteCarMutation,
+
+  // ✅ Update
+  useUpdateWorkShopMutation,
 } = adminAPI;

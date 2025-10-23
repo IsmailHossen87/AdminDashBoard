@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { LayoutDashboard, Bell, LogOut, User, Menu, MessageCircle } from "lucide-react";
+import {
+  LayoutDashboard,
+  Bell,
+  LogOut,
+  User,
+  Menu,
+  MessageCircle,
+  Car,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,11 +31,12 @@ const AdminNavbar: React.FC = () => {
   const menuItems: MenuItem[] = [
     { name: "Profile", icon: User, path: "/admin/profile" },
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
-    { name: "CarModel", icon: Bell, path: "/admin/carmodel" },
     { name: "CreateAdmin", icon: User, path: "/admin/createAdmin" },
-    { name: "Message", icon: MessageCircle, path: "/admin/message" },
-    { name: "Brand", icon: MdBrandingWatermark, path: "/admin/brand" },
+    { name: "Car", icon: Car, path: "/admin/car" },
+    { name: "Brand", icon: Car, path: "/admin/brand" },
+    { name: "CarModel", icon: Car, path: "/admin/carmodel" },
     { name: "WorkShop", icon: MdWorkHistory, path: "/admin/workShop" },
+        { name: "Message", icon: MessageCircle, path: "/admin/message" },
   ];
 
   const checkLoginStatus = () => {

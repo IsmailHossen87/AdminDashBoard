@@ -11,6 +11,10 @@ import CarModelTable from "../Page/CARMODEL/carModelTable";
 import CreateCarModel from "../Page/CARMODEL/CreateCarModel";
 import CarBrandDetail from "../Page/CARBRAND/Details";
 import WorkShop from "../Page/workShop/workShop";
+import WorkShopDetails from "../Page/workShop/workShopDetails";
+import Cars from "../Page/CAR/GetAllCar";
+import CarDetails from "../Page/CAR/CarDetails";
+import UpdateWorkShop from "../Page/workShop/UpdateWorkShop";
 
 const Routes = createBrowserRouter([
   {
@@ -55,6 +59,10 @@ const Routes = createBrowserRouter([
         element: <WorkShop/>,
       },
        {
+        path: "admin/car",
+        element: <Cars/>,
+      },
+       {
         path: "signUp",
         element: <Register/>,
       },
@@ -69,6 +77,18 @@ const Routes = createBrowserRouter([
        {
         path: "model",
         element: <CreateCarModel/>,
+      },
+       {
+        path: "UpdateWorkShop/:workshopId",
+        element: <UpdateWorkShop/>,
+      },
+       {
+        path: "workShopDetails/:workShopId",
+        element: <WorkShopDetails/>,
+      },
+       {
+        path: "carDetails/:carId",
+        element: <CarDetails/>,
       },
       
     ],
