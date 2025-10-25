@@ -53,7 +53,7 @@ const CarBrandComponent: React.FC = () => {
         {/* Right side - Create Car Brand Button */}
         <div>
           <Link to="/create">
-            <button className="px-6 flex justify-between items-center gap-2 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+            <button className="px-6 flex justify-between text-white rounded-ml items-center rounded-md gap-2 py-2 bg-linear-to-tr from-blue-500 via-purple-600 to-pink-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
               Create Car Brand <MdOutlineCreateNewFolder />
             </button>
           </Link>

@@ -51,7 +51,7 @@ const MessageList = () => {
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-indigo-100 rounded-full text-indigo-600">
+                <div className="p-3  bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 rounded-full text-white">
                   <MessageSquare size={22} />
                 </div>
                 <h2 className="text-base font-semibold text-gray-800">

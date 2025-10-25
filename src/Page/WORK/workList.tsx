@@ -1,6 +1,8 @@
 // src/components/WorkList.tsx
 import React from "react";
 import { useWorkListQuery } from "../../redux/feature/work";
+import { Link } from "react-router";
+import { MdOutlineCreateNewFolder } from "react-icons/md";
 
 
 const colors = [
@@ -17,9 +19,21 @@ const WorkList: React.FC = () => {
 
   return (
    <div >
-    <div className="flex">
-        Work List
-    </div>
+   <div className="flex flex-col sm:flex-row justify-between items-center bg-white/80 backdrop-blur-lg border border-gray-200 rounded-xl shadow-md p-5 mb-6">
+  {/* Title */}
+  <h2 className="text-2xl font-bold">
+    🧰 Work List
+  </h2>
+
+  {/* Create Button */}
+  <Link to="/admin/addWork" className="mt-4 sm:mt-0">
+    <button className="flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium text-white bg-linear-to-tr from-blue-500 via-purple-600 to-pink-500 shadow-lg hover:shadow-pink-400/30 hover:scale-[1.03] transition-all duration-300">
+      <MdOutlineCreateNewFolder className="text-lg" />
+      <span>Create Work</span>
+    </button>
+  </Link>
+</div>
+
      <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {data?.data?.result.map((work: any, idx: number) => {
         const colorClass = colors[idx % colors.length];

@@ -30,7 +30,6 @@ const AdminNavbar: React.FC = () => {
   const menuItems: MenuItem[] = [
     { name: "Profile", icon: User, path: "/admin/profile" },
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
-    { name: "Create Admin", icon: User, path: "/admin/createAdmin" },
     { name: "Car", icon: Car, path: "/admin/car" },
     { name: "Brand", icon: MdBrandingWatermark, path: "/admin/brand" },
     { name: "Car Model", icon: Car, path: "/admin/carmodel" },
@@ -38,7 +37,7 @@ const AdminNavbar: React.FC = () => {
     { name: "Messages", icon: MessageCircle, path: "/admin/message" },
     { name: "Setting", icon: Settings, path: "/admin/setting" },
     { name: "Work", icon: Settings, path: "/admin/workList" },
-    { name: "Spare", icon: Settings, path: "/admin/work" },
+    { name: "Spare", icon: Settings, path: "/admin/Spare" },
   ];
 
   const checkLoginStatus = () => {
@@ -91,7 +90,7 @@ const AdminNavbar: React.FC = () => {
             to={path}
             className={({ isActive }) =>
               `flex items-center w-full p-3 rounded-md transition-all ${
-                isActive ? "bg-[#CB3C40]" : "hover:bg-blue-600"
+                isActive ? "bg-linear-to-tr from-blue-500 via-purple-500 font-bold to-pink-500 text-white " : "hover:bg-pink-500"
               }`
             }
           >

@@ -20,6 +20,7 @@ import CreateCarImage from "../Page/IMAGE/CreateCarImage";
 import UpdateImage from "../Page/IMAGE/updateImage";
 import WorkList from "../Page/WORK/workList";
 import CreateWorkForm from "../Page/WORK/work";
+import CreateSpare from "../Page/SPARE/SpareCreate";
 
 const Routes = createBrowserRouter([
   {
@@ -51,10 +52,6 @@ const Routes = createBrowserRouter([
         path: "admin/brand",
         element: <CarBrandComponent/>,
       },
-      //  {
-      //   path: "admin/allImage",
-      //   element: <ImageList/>,
-      // },
        {
         path: "admin/carmodel",
         element: <CarModelTable/>,
@@ -67,7 +64,7 @@ const Routes = createBrowserRouter([
         path: "admin/workShop",
         element: <WorkShop/>,
       },
-      // spare/word
+      // spare/work
        {
         path: "admin/workList",
         element: <WorkList/>,
@@ -75,6 +72,10 @@ const Routes = createBrowserRouter([
        {
         path: "admin/addWork",
         element: <CreateWorkForm/>,
+      },
+       {
+        path: "admin/Spare",
+        element: <CreateSpare/>,
       },
        {
         path: "admin/car",

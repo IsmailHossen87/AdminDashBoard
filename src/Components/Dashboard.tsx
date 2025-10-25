@@ -53,8 +53,8 @@ const Dashboard = () => {
         </div>
 
         {/* Subscriptions Count */}
-        <div className="bg-[#FDCB00] rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
-          <div className="p-3 bg-[#F8A800] rounded-full text-white">
+        <div className="bg-pink-500 rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
+          <div className="p-3 bg-pink-700 rounded-full text-white">
             <Bookmark size={28} />
           </div>
           <div>
@@ -118,43 +118,57 @@ const Dashboard = () => {
       </div>
 
       {/* === Admin Info Section === */}
-      <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-5">All Admins</h2>
-        <div className="md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PersonalData?.data?.map((admin: any, index: number) => (
-            <div
-              key={admin._id || index}
-              className="bg-[#FFCB77] rounded-2xl shadow-md p-6 hover:shadow-xl transition"
-            >
-             <div className="flex justify-between ">
-               <div className="flex items-center gap-4 mb-4">
-                <div className="p-3 bg-indigo-100 rounded-full text-indigo-600">
-                  <User size={26} />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {admin.name}
-                  </h3>
-                  <p className="text-sm text-gray-500">Admin ID: {admin._id.slice(0, 8)}...</p>
-                </div>
-              </div>
+      <div className="min-h-screen py-10 px-6">
+  <h2 className="text-3xl font-bold text-gray-800 mb-8 ">
+    All Admins
+  </h2>
 
-             </div>
-
-              <div className="text-gray-700 text-sm space-y-2">
-                <p className="flex items-center gap-2">
-                  <Mail size={16} className="text-indigo-600" />
-                  {admin.email}
-                </p>
-                <p className="flex items-center gap-2">
-                  <Phone size={16} className="text-green-600" />
-                  {admin.contact}
-                </p>
-              </div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {PersonalData?.data?.map((admin: any, index: number) => (
+      <div
+        key={admin._id || index}
+        className="bg-linear-to-tr from-blue-500 via-purple-600 to-pink-500 p-[#1px] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300"
+      >
+        <div className="bg-white rounded-2xl p-6 flex flex-col gap-4 hover:scale-[1.02] transition-all duration-300">
+          {/* Header */}
+          <div className="flex items-center gap-4 border-b border-gray-100 pb-3">
+            <div className="p-3 bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 text-white rounded-full shadow-md">
+              <User size={26} />
             </div>
-          ))}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">
+                {admin.name}
+              </h3>
+              <p className="text-sm text-gray-500">
+                ID: {admin._id.slice(0, 8)}...
+              </p>
+            </div>
+          </div>
+
+          {/* Contact Info */}
+          <div className="text-gray-700 text-sm space-y-2">
+            <p className="flex items-center gap-2">
+              <Mail size={16} className="text-indigo-600" />
+              <span className="truncate">{admin.email}</span>
+            </p>
+            <p className="flex items-center gap-2">
+              <Phone size={16} className="text-green-600" />
+              <span>{admin.contact}</span>
+            </p>
+          </div>
+
+          {/* Footer Tag */}
+          <div className="mt-3">
+            <span className="inline-block text-xs font-semibold bg-linear-to-r from-blue-500 to-pink-500 text-white px-3 py-1 rounded-full shadow-md">
+              Admin
+            </span>
+          </div>
         </div>
       </div>
+    ))}
+  </div>
+</div>
+
     </div>
   );
 };

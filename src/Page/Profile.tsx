@@ -25,7 +25,7 @@ const Profile: React.FC = () => {
 
   return (
     <div className="max-w-lg mx-auto mt-10 bg-white dark:bg-gray-900 shadow-lg rounded-2xl overflow-hidden">
-      <div className="bg-linear-to-r from-blue-400 to-indigo-700 h-32"></div>
+      <div className="bg-linear-to-r  from-blue-500 via-purple-500 to-pink-500 text-white  h-32"></div>
 
       <div className="relative px-6 pb-8 -mt-16">
         <div className="flex flex-col items-center">
@@ -40,7 +40,7 @@ const Profile: React.FC = () => {
               <User className="w-12 h-12 text-gray-500" />
             </div>
           )}
-          <h2 className="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="mt-4 text-2xl font-bold  text-gray-900 dark:text-white">
             {profile.name}
           </h2>
           <p className="text-sm text-gray-500">{profile.role}</p>
@@ -52,20 +52,39 @@ const Profile: React.FC = () => {
           )}
         </div>
 
-        <div className="mt-6 space-y-3 text-gray-700 dark:text-gray-300">
-          <div className="flex items-center gap-3">
-            <Mail size={18} /> <span>{profile.email}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Phone size={18} /> <span>{profile.contact}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Shield size={18} /> <span>Status: {profile.status}</span>
-          </div>
-          <div className="text-sm text-gray-500 mt-3">
-            Created: {new Date(profile.createdAt).toLocaleDateString()}
-          </div>
-        </div>
+       <div className="mt-6 space-y-4 text-gray-700 dark:text-gray-300">
+  {/* Email */}
+  <div className="flex items-center gap-3">
+    <div className="p-3 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 text-white shadow-md">
+      <Mail size={18} />
+    </div>
+    <span className="text-sm md:text-base">{profile.email}</span>
+  </div>
+
+  {/* Phone */}
+  <div className="flex items-center gap-3">
+    <div className="p-3 rounded-full bg-gradient-to-tr from-green-500 to-emerald-600 text-white shadow-md">
+      <Phone size={18} />
+    </div>
+    <span className="text-sm md:text-base">{profile.contact}</span>
+  </div>
+
+  {/* Status */}
+  <div className="flex items-center gap-3">
+    <div className="p-3 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 text-white shadow-md">
+      <Shield size={18} />
+    </div>
+    <span className="text-sm md:text-base">
+      Status: <span className="font-semibold capitalize">{profile.status}</span>
+    </span>
+  </div>
+
+  {/* Created Date */}
+  <div className="text-sm text-gray-500 mt-4">
+    Created: {new Date(profile.createdAt).toLocaleDateString()}
+  </div>
+</div>
+
       </div>
     </div>
   );
