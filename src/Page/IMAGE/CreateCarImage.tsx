@@ -1,31 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { motion } from "framer-motion";
+
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router";
-import {
-  useAllBrandQuery,
-  useAllCountryQuery,
-  useCreateCarBrandMutation,
-} from "../../redux/feature/adminApi";
+import { useCreateCarBrandMutation, useCreateImageMutation } from "../../redux/feature/adminApi";
 
 interface FormData {
   title: string;
-  country: string;
   description: string;
   image: FileList;
+  type: string;
 }
 
-const CreateCarBrand: React.FC = () => {
+const CreateCarImage: React.FC = () => {
   const [createCarBrand, { isLoading, isSuccess, isError }] =
-    useCreateCarBrandMutation();
-  const navigate = useNavigate();
-
-  const { data: countryData, isLoading: isCountryLoading } =
-    useAllCountryQuery(undefined);
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+    useCreateImageMutation();
+    const navigate = useNavigate()
 
   const {
     register,
@@ -33,7 +26,6 @@ const CreateCarBrand: React.FC = () => {
     formState: { errors },
     reset,
   } = useForm<FormData>();
-
 
   const onSubmit = async (data: FormData) => {
     if (!data.image || data.image.length === 0) {
@@ -45,8 +37,8 @@ const CreateCarBrand: React.FC = () => {
 
     const dataObject = {
       title: data.title,
-      country: data.country,
       description: data.description,
+      type: data.type,
     };
 
     formData.append("data", JSON.stringify(dataObject));
@@ -56,7 +48,7 @@ const CreateCarBrand: React.FC = () => {
       await createCarBrand(formData).unwrap();
       toast.success("Car Brand Created Successfully!");
       reset();
-      navigate("/admin/brand");
+      navigate("/admin/carmodel")
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to create car brand");
     }
@@ -65,12 +57,12 @@ const CreateCarBrand: React.FC = () => {
   return (
     <div className="min-h-screen p-8 bg-gray-100 flex justify-center items-start">
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8"
       >
-        <h2 className="text-2xl font-bold text-indigo-700 mb-6 text-center">
+        <h2 className="text-3xl font-bold text-center text-indigo-700 mb-6">
           Create New Car Brand
         </h2>
 
@@ -91,27 +83,21 @@ const CreateCarBrand: React.FC = () => {
             )}
           </div>
 
-          {/* Country */}
+          {/* Type */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Country
+              Type
             </label>
             <select
-              {...register("country", { required: "Country is required" })}
+              {...register("type", { required: "Type is required" })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              onChange={(e) => setSelectedCountry(e.target.value)}
-              value={selectedCountry || ""}
             >
-              <option value="">Select Country</option>
-              {countryData?.data?.map((country: any) => (
-                <option key={country._id} value={country._id}>
-                  {country.title}
-                </option>
-              ))}
+              <option value="">Select Type</option>
+              <option value="car_symbol">Car Symbol</option>
+              <option value="website_logo">Website Logo</option>
             </select>
-
-            {errors.country && (
-              <p className="text-red-500 text-xs">{errors.country.message}</p>
+            {errors.type && (
+              <p className="text-red-500 text-xs">{errors.type.message}</p>
             )}
           </div>
 
@@ -122,9 +108,7 @@ const CreateCarBrand: React.FC = () => {
             </label>
             <textarea
               placeholder="Enter car brand description"
-              {...register("description", {
-                required: "Description is required",
-              })}
+              {...register("description", { required: "Description is required" })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
             {errors.description && (
@@ -164,9 +148,7 @@ const CreateCarBrand: React.FC = () => {
 
           {/* Success or Error Feedback */}
           {isSuccess && (
-            <p className="text-green-500 text-center mt-2">
-              Car Brand Created!
-            </p>
+            <p className="text-green-500 text-center mt-2">Car Brand Created!</p>
           )}
           {isError && (
             <p className="text-red-500 text-center mt-2">
@@ -179,4 +161,4 @@ const CreateCarBrand: React.FC = () => {
   );
 };
 
-export default CreateCarBrand;
+export default CreateCarImage;

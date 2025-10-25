@@ -7,6 +7,7 @@ import { FiDelete, FiEdit } from "react-icons/fi";
 import { Button, Tooltip } from "antd";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
 import { toast } from "react-toastify";
+import ImageList from "../IMAGE/ImageList";
 
 interface CarModel {
   _id: string;
@@ -118,6 +119,10 @@ const CarModelTable = () => {
           </div>
         )}
       </div>
+      {/* IMAGE TYPE */}
+     <div>
+      <ImageList/>
+     </div>
     </div>
   );
 };

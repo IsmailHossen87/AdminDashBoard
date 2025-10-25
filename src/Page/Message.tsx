@@ -6,17 +6,13 @@ import { toast } from "react-toastify";
 const MessageList = () => {
   const { data: messages, isLoading, isError, refetch } = useAllMessageQuery(undefined);
   const [deleteMessage, { isLoading: isDeleting }] = useDeleteMessageMutation();
-
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this message?");
-    if (!confirmDelete) return;
 
     try {
       await deleteMessage(id).unwrap();
       toast.success("Message deleted successfully!");
-      refetch(); // delete করার পর data আবার refresh হবে
+      refetch(); 
     } catch (error) {
-      console.error(error);
       toast.error("Failed to delete message!");
     }
   };

@@ -37,6 +37,8 @@ const AdminNavbar: React.FC = () => {
     { name: "Workshop", icon: MdWorkHistory, path: "/admin/workShop" },
     { name: "Messages", icon: MessageCircle, path: "/admin/message" },
     { name: "Setting", icon: Settings, path: "/admin/setting" },
+    { name: "Work", icon: Settings, path: "/admin/workList" },
+    { name: "Spare", icon: Settings, path: "/admin/work" },
   ];
 
   const checkLoginStatus = () => {

@@ -3,14 +3,14 @@ import { baseApi } from "../baseApi";
 export const adminAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // // ✅ Create Car Brand
-    // createCarBrand: builder.mutation({
-    //   query: (body) => ({
-    //     url: "/image",
-    //     method: "POST",
-    //     body,
-    //   }),
-    //   invalidatesTags: ["ADMIN"],
-    // }),
+    createImage: builder.mutation({
+      query: (body) => ({
+        url: "/images",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["IMAGE"],
+    }),
     // ✅ Create Car Brand
     createCarBrand: builder.mutation({
       query: (body) => ({
@@ -92,6 +92,13 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       providesTags: ["COUNTRY"],
     }),
+    imageType: builder.query({
+      query: () => ({
+        url: "images/unpaginated/car_symbol",
+        method: "GET",
+      }),
+      providesTags: ["IMAGE"],
+    }),
 
 // ---------------------------------------
     // ✅ Single Brand Fetch
@@ -120,7 +127,15 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       providesTags: ["CAR"],
     }),
-
+    // ✅ Single Car Fetch
+    getSingleImage: builder.query({
+      query: (carId: string) => ({
+        url: `/images/get/${carId}`,
+        method: "GET",
+      }),
+      providesTags: ["IMAGE"],
+    }),
+// ----------------------------   SINGLE
     // ✅ Delete Message
     deleteMessage: builder.mutation({
       query: (messageId: string) => ({
@@ -165,6 +180,14 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["CAR"],
     }),
+    // ✅ Delete Image
+    deleteImageType: builder.mutation({
+      query: (id: string) => ({
+        url: `/images/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["IMAGE"],
+    }),
 
     // ✅ Update Workshop
     updateWorkShop: builder.mutation({
@@ -175,6 +198,15 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["WORKSHOP"],
     }),
+    // ✅ Update Workshop
+    updateImage: builder.mutation({
+      query: ({ id, payload }: { id: string; payload: any }) => ({
+        url: `/images/${id}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["IMAGE"],
+    }),
   }),
 
   overrideExisting: false,
@@ -184,6 +216,7 @@ export const {
   // ✅ Create
   useCreateCarBrandMutation,
   useCreateCarModelMutation,
+  useCreateImageMutation,
 
   // ✅ Get All
   useGetDashBoardQuery,
@@ -193,11 +226,13 @@ export const {
   useAllMessageQuery,
   useAllCarQuery,
   useAllCountryQuery,
+  useImageTypeQuery,
 
   // ✅ Get Single
   useGetBrandByIdQuery,
   useGetSingleWorkShopQuery,
   useGetSingleCarQuery,
+  useGetSingleImageQuery,
 
   // ✅ Delete
   useDeleteMessageMutation,
@@ -205,7 +240,9 @@ export const {
   useDeletecarModelMutation,
   useDeleteWorkShopMutation,
   useDeleteCarMutation,
+  useDeleteImageTypeMutation,
 
   // ✅ Update
   useUpdateWorkShopMutation,
+  useUpdateImageMutation
 } = adminAPI;
