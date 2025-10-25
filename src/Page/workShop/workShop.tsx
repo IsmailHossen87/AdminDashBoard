@@ -14,6 +14,7 @@ import {
   Trash2,
   Eye,
   EyeIcon,
+  Edit,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import {
@@ -244,10 +245,10 @@ const WorkShop = () => {
                   {/* Edit Button */}
                   <Link
                     to={`/UpdateWorkShop/${workshop._id}`}
-                    className="absolute top-0 right-12 p-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 transition"
+                    className="absolute top-0 right-12 p-2 bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500  text-white rounded-full hover:bg-indigo-600 transition"
                     title="Edit Workshop"
                   >
-                    <Eye size={16} />
+                    <Edit size={16} />
                   </Link>
                 </div>
               </div>

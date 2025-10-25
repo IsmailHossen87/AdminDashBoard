@@ -6,17 +6,13 @@ import { toast } from "react-toastify";
 const MessageList = () => {
   const { data: messages, isLoading, isError, refetch } = useAllMessageQuery(undefined);
   const [deleteMessage, { isLoading: isDeleting }] = useDeleteMessageMutation();
-
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this message?");
-    if (!confirmDelete) return;
 
     try {
       await deleteMessage(id).unwrap();
       toast.success("Message deleted successfully!");
-      refetch(); // delete করার পর data আবার refresh হবে
+      refetch(); 
     } catch (error) {
-      console.error(error);
       toast.error("Failed to delete message!");
     }
   };
@@ -55,7 +51,7 @@ const MessageList = () => {
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-indigo-100 rounded-full text-indigo-600">
+                <div className="p-3  bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 rounded-full text-white">
                   <MessageSquare size={22} />
                 </div>
                 <h2 className="text-base font-semibold text-gray-800">

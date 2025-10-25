@@ -7,6 +7,7 @@ import { FiDelete, FiEdit } from "react-icons/fi";
 import { Button, Tooltip } from "antd";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
 import { toast } from "react-toastify";
+import ImageList from "../IMAGE/ImageList";
 
 interface CarModel {
   _id: string;
@@ -22,9 +23,13 @@ const CarModelTable = () => {
   const { data, error, isLoading } = useAllCarModelQuery(undefined);
   const [deleteCarBrand] = useDeletecarModelMutation();
 
-  const handleDelete = (id: string) => {
-    deleteCarBrand(id);
-    toast.success("Successfully Delete the model");
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteCarBrand(id).unwrap();
+      toast.success("Model deleted successfully!");
+    } catch {
+      toast.error("Failed to delete the model.");
+    }
   };
 
   if (isLoading)
@@ -42,81 +47,96 @@ const CarModelTable = () => {
     );
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <div className="bg-white/60 backdrop-blur-lg border border-gray-100 shadow-xl rounded-2xl p-6 transition-all hover:shadow-2xl">
-        <div className="flex justify-between">
-          <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
-            🚗 Car Models Management
-          </h2>
+    <div className="p-8 min-h-screen bg-linear-to-br from-slate-100 via-gray-100 to-slate-200">
+      <div className="max-w-6xl mx-auto">
+        {/* Card container */}
+        <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden transition-all hover:shadow-indigo-300/40 hover:scale-[1.01] duration-300">
+          {/* linear header strip */}
+          <div className="bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 p-4 flex justify-between items-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-white tracking-wide drop-shadow-md">
+              🚗 Car Models Management
+            </h2>
 
-          <Link to="/model">
-            <button className="px-6 flex justify-between items-center gap-2 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
-              Create Car Model <MdOutlineCreateNewFolder />
-            </button>
-          </Link>
+            <Link to="/model">
+              <button className="px-5 py-2 flex items-center gap-2  bg-white text-indigo-600 font-semibold rounded-md hover:bg-indigo-50 transition-all shadow-md hover:shadow-lg">
+                <MdOutlineCreateNewFolder className="text-lg" />
+                Create Model
+              </button>
+            </Link>
+          </div>
+
+          {/* Table section */}
+          <div className="p-6">
+            {data?.data?.length === 0 ? (
+              <div className="text-center text-gray-400 font-medium py-10">
+                No car models found.
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-sm md:text-base">
+                  <thead>
+                    <tr className="bg-linear-to-r from-indigo-100 to-pink-100 text-gray-800 uppercase text-xs md:text-sm font-semibold tracking-wide">
+                      <th className="px-5 py-3 text-left rounded-tl-xl">Title</th>
+                      <th className="px-5 py-3 text-left">Brand</th>
+                      <th className="px-5 py-3 text-left">Created At</th>
+                      <th className="px-5 py-3 text-center rounded-tr-xl">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data?.data?.map((carModel: CarModel, index: number) => (
+                      <tr
+                        key={carModel._id}
+                        className={`${
+                          index % 2 === 0
+                            ? "bg-white/40"
+                            : "bg-white/30"
+                        } hover:bg-indigo-50 transition duration-200`}
+                      >
+                        <td className="px-5 py-3 font-medium text-gray-800">
+                          {carModel.title}
+                        </td>
+                        <td className="px-5 py-3 text-gray-700">
+                          {carModel.brand}
+                        </td>
+                        <td className="px-5 py-3 text-gray-500">
+                          {new Date(carModel.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="px-5 py-3 flex justify-center gap-3">
+                          <Tooltip title="Edit Model">
+                            <Link to={`/edit/${carModel._id}`}>
+                              <Button
+                                icon={<FiEdit />}
+                                shape="circle"
+                                className="bg-linear-to-r from-indigo-500 to-purple-500 text-white hover:scale-110 hover:shadow-md transition-all"
+                              />
+                            </Link>
+                          </Tooltip>
+
+                          <Tooltip title="Delete Model">
+                            <Button
+                              danger
+                              icon={<FiDelete />}
+                              shape="circle"
+                              onClick={() => handleDelete(carModel._id)}
+                              className="hover:scale-110 transition-all"
+                            />
+                          </Tooltip>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
 
-        {data?.data?.length === 0 ? (
-          <div className="text-center text-gray-500 font-medium py-8">
-            No car models found.
-          </div>
-        ) : (
-          <div className="overflow-x-auto rounded-xl">
-            <table className="w-full border-collapse text-sm md:text-base">
-              <thead>
-                <tr className=" from-indigo-100 to-indigo-200 text-gray-700 uppercase text-xs md:text-sm font-semibold tracking-wide">
-                  <th className="px-5 py-3 text-left rounded-tl-lg">Title</th>
-                  <th className="px-5 py-3 text-left">Brand</th>
-                  <th className="px-5 py-3 text-left">Created At</th>
-                  <th className="px-5 py-3 text-center rounded-tr-lg">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.data?.map((carModel: CarModel, index: number) => (
-                  <tr
-                    key={carModel._id}
-                    className={`${
-                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    } hover:bg-indigo-50 transition duration-200`}
-                  >
-                    <td className="px-5 py-3 font-medium text-gray-800">
-                      {carModel.title}
-                    </td>
-                    <td className="px-5 py-3 text-gray-700">
-                      {carModel.brand}
-                    </td>
-                    <td className="px-5 py-3 text-gray-500">
-                      {new Date(carModel.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-5 py-3 flex justify-center gap-3">
-                      <Tooltip title="Edit Model">
-                        <Link to={`/edit/${carModel._id}`}>
-                          <Button
-                            icon={<FiEdit />}
-                            type="primary"
-                            shape="circle"
-                            className="bg-indigo-500 hover:bg-indigo-600"
-                          />
-                        </Link>
-                      </Tooltip>
-                      <Tooltip title="Delete Model">
-                        <Button
-                          danger
-                          icon={<FiDelete />}
-                          shape="circle"
-                          onClick={() => handleDelete(carModel._id)}
-                          className="hover:scale-110 transition"
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        {/* Image List Section */}
+        <div className="mt-10">
+          <ImageList />
+        </div>
       </div>
     </div>
   );

@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import {
   LayoutDashboard,
-  Bell,
   LogOut,
   User,
   Menu,
   MessageCircle,
   Car,
+  Settings,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sidebarSlice";
 import { VscSignIn } from "react-icons/vsc";
-import type { RootState } from "../redux/store";
 import { MdBrandingWatermark, MdWorkHistory } from "react-icons/md";
+import type { RootState } from "../redux/store";
 
 interface MenuItem {
   name: string;
@@ -25,35 +25,30 @@ interface MenuItem {
 const AdminNavbar: React.FC = () => {
   const dispatch = useDispatch();
   const { isCollapsed } = useSelector((state: RootState) => state.sidebar);
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const menuItems: MenuItem[] = [
     { name: "Profile", icon: User, path: "/admin/profile" },
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
-    { name: "CreateAdmin", icon: User, path: "/admin/createAdmin" },
     { name: "Car", icon: Car, path: "/admin/car" },
-    { name: "Brand", icon: Car, path: "/admin/brand" },
-    { name: "CarModel", icon: Car, path: "/admin/carmodel" },
-    { name: "WorkShop", icon: MdWorkHistory, path: "/admin/workShop" },
-        { name: "Message", icon: MessageCircle, path: "/admin/message" },
+    { name: "Brand", icon: MdBrandingWatermark, path: "/admin/brand" },
+    { name: "Car Model", icon: Car, path: "/admin/carmodel" },
+    { name: "Workshop", icon: MdWorkHistory, path: "/admin/workShop" },
+    { name: "Messages", icon: MessageCircle, path: "/admin/message" },
+    { name: "Setting", icon: Settings, path: "/admin/setting" },
+    { name: "Work", icon: Settings, path: "/admin/workList" },
+    { name: "Spare", icon: Settings, path: "/admin/Spare" },
   ];
 
   const checkLoginStatus = () => {
     const token = localStorage.getItem("accessToken");
-    setIsLoggedIn(!!token); // If token exists, the user is logged in
+    setIsLoggedIn(!!token);
   };
 
   useEffect(() => {
     checkLoginStatus();
-    const handleStorageChange = () => {
-      checkLoginStatus();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
+    window.addEventListener("storage", checkLoginStatus);
+    return () => window.removeEventListener("storage", checkLoginStatus);
   }, []);
 
   const handleLogout = () => {
@@ -69,15 +64,15 @@ const AdminNavbar: React.FC = () => {
       } bg-[#1771B7] text-white h-screen flex flex-col transition-all duration-300 fixed`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-700">
+      <div className="flex items-center justify-between p-4 border-b border-blue-400">
         {!isCollapsed && (
-          <Link to={"/"}>
+          <Link to="/">
             <h1 className="text-xl font-bold">AdminPanel</h1>
           </Link>
         )}
         <button
           onClick={() => dispatch(toggleSidebar())}
-          className=" hover:text-white"
+          className="hover:text-gray-100"
         >
           <Menu size={22} />
         </button>
@@ -95,7 +90,7 @@ const AdminNavbar: React.FC = () => {
             to={path}
             className={({ isActive }) =>
               `flex items-center w-full p-3 rounded-md transition-all ${
-                isActive ? "bg-[#CB3C40]" : "hover:bg-gray-700"
+                isActive ? "bg-linear-to-tr from-blue-500 via-purple-500 font-bold to-pink-500 text-white " : "hover:bg-pink-500"
               }`
             }
           >
@@ -106,7 +101,7 @@ const AdminNavbar: React.FC = () => {
       </motion.div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-700">
+      <div className="p-4 border-t border-blue-400">
         {isLoggedIn ? (
           <div className="flex items-center justify-between">
             {!isCollapsed && (
@@ -118,7 +113,7 @@ const AdminNavbar: React.FC = () => {
                 />
                 <div>
                   <p className="text-sm font-semibold">Admin</p>
-                  <p className="text-xs text-gray-400">Super Admin</p>
+                  <p className="text-xs text-gray-200">Super Admin</p>
                 </div>
               </div>
             )}
@@ -131,11 +126,11 @@ const AdminNavbar: React.FC = () => {
           </div>
         ) : (
           <Link
-            to="/signUp"
-            className="flex px-4 rounded-xl py-2 items-center bg-amber-700 justify-between"
+            to="/login"
+            className="flex items-center justify-between px-4 py-2 bg-green-700 rounded-xl"
           >
-            <p className=" font-semibold">Sign Up</p>
-            <VscSignIn size={22} className="" />
+            <p className="font-semibold">Login</p>
+            <VscSignIn size={22} />
           </Link>
         )}
       </div>

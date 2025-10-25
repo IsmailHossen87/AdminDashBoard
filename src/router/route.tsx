@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import AdminLayout from "../AdminDashBoard/layout/AdminLayout";
 import Dashboard from "../Components/Dashboard";
-import Register from "../Page/Register";
 import Login from "../Page/Login";
 import CreateAdmin from "../Page/CreateAdmin";
 import MessageList from "../Page/Message";
@@ -15,6 +14,13 @@ import WorkShopDetails from "../Page/workShop/workShopDetails";
 import Cars from "../Page/CAR/GetAllCar";
 import CarDetails from "../Page/CAR/CarDetails";
 import UpdateWorkShop from "../Page/workShop/UpdateWorkShop";
+import Profile from "../Page/Profile";
+import Settings from "../Page/Setting/getSetting";
+import CreateCarImage from "../Page/IMAGE/CreateCarImage";
+import UpdateImage from "../Page/IMAGE/updateImage";
+import WorkList from "../Page/WORK/workList";
+import CreateWorkForm from "../Page/WORK/work";
+import CreateSpare from "../Page/SPARE/SpareCreate";
 
 const Routes = createBrowserRouter([
   {
@@ -28,7 +34,7 @@ const Routes = createBrowserRouter([
       },
        {
         path: "admin/profile",
-        element: <Dashboard/>,
+        element: <Profile/>,
       },
        {
         path: "admin/dashboard",
@@ -58,13 +64,31 @@ const Routes = createBrowserRouter([
         path: "admin/workShop",
         element: <WorkShop/>,
       },
+      // spare/work
+       {
+        path: "admin/workList",
+        element: <WorkList/>,
+      },
+       {
+        path: "admin/addWork",
+        element: <CreateWorkForm/>,
+      },
+       {
+        path: "admin/Spare",
+        element: <CreateSpare/>,
+      },
        {
         path: "admin/car",
         element: <Cars/>,
       },
        {
-        path: "signUp",
-        element: <Register/>,
+        path: "createAdmin",
+        element: <CreateAdmin/>,
+      },
+      // SETTING
+       {
+        path: "admin/setting",
+        element: <Settings/>,
       },
        {
         path: "login",
@@ -77,6 +101,14 @@ const Routes = createBrowserRouter([
        {
         path: "model",
         element: <CreateCarModel/>,
+      },
+       {
+        path: "imageType",
+        element: <CreateCarImage/>,
+      },
+       {
+        path: `image/edit/:id`,
+        element: <UpdateImage/>,
       },
        {
         path: "UpdateWorkShop/:workshopId",

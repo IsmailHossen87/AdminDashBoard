@@ -1,77 +1,86 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router";
-import {
-  useAllBrandQuery,
-  useAllCountryQuery,
-  useCreateCarBrandMutation,
-} from "../../redux/feature/adminApi";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetSingleImageQuery, useUpdateImageMutation } from "../../redux/feature/adminApi";
 
 interface FormData {
   title: string;
-  country: string;
   description: string;
-  image: FileList;
+  image: FileList | null;
+  type: string;
 }
 
-const CreateCarBrand: React.FC = () => {
-  const [createCarBrand, { isLoading, isSuccess, isError }] =
-    useCreateCarBrandMutation();
+const UpdateImage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const { data: countryData, isLoading: isCountryLoading } =
-    useAllCountryQuery(undefined);
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const { data, isLoading: isFetching } = useGetSingleImageQuery(id);
+  const [updateImage, { isLoading, isSuccess, isError }] = useUpdateImageMutation();
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-    reset,
   } = useForm<FormData>();
 
+  console.log(data?.data);
 
-  const onSubmit = async (data: FormData) => {
-    if (!data.image || data.image.length === 0) {
-      toast.error("Image is required!");
-      return;
+  // Prefill form with fetched data
+  useEffect(() => {
+    if (data?.data) {
+      setValue("title", data.data.title);
+      setValue("description", data.data.description);
+      setValue("type", data.data.type);
     }
+  }, [data, setValue]);
 
-    const formData = new FormData();
-
-    const dataObject = {
-      title: data.title,
-      country: data.country,
-      description: data.description,
-    };
-
-    formData.append("data", JSON.stringify(dataObject));
-    formData.append("image", data.image[0]);
-
+  const onSubmit = async (formData: FormData) => {
     try {
-      await createCarBrand(formData).unwrap();
-      toast.success("Car Brand Created Successfully!");
-      reset();
-      navigate("/admin/brand");
+      const updatedData = new FormData();
+      updatedData.append(
+        "data",
+        JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          type: formData.type,
+        })
+      );
+
+      if (formData.image && formData.image.length > 0) {
+        updatedData.append("image", formData.image[0]);
+      }
+
+      await updateImage({ id, formData: updatedData }).unwrap();
+      toast.success("Image updated successfully!");
+      navigate("/admin/carmodel"); // redirect to image list
     } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to create car brand");
+      toast.error(error?.data?.message || "Failed to update image");
     }
   };
+
+  if (isFetching) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-lg font-semibold">
+        Loading image details...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-8 bg-gray-100 flex justify-center items-start">
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8"
       >
-        <h2 className="text-2xl font-bold text-indigo-700 mb-6 text-center">
-          Create New Car Brand
+        <h2 className="text-3xl font-bold text-center text-indigo-700 mb-6">
+          Update Image
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -82,7 +91,7 @@ const CreateCarBrand: React.FC = () => {
             </label>
             <input
               type="text"
-              placeholder="Enter car brand title"
+              placeholder="Enter title"
               {...register("title", { required: "Title is required" })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
@@ -91,27 +100,21 @@ const CreateCarBrand: React.FC = () => {
             )}
           </div>
 
-          {/* Country */}
+          {/* Type */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Country
+              Type
             </label>
             <select
-              {...register("country", { required: "Country is required" })}
+              {...register("type", { required: "Type is required" })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              onChange={(e) => setSelectedCountry(e.target.value)}
-              value={selectedCountry || ""}
             >
-              <option value="">Select Country</option>
-              {countryData?.data?.map((country: any) => (
-                <option key={country._id} value={country._id}>
-                  {country.title}
-                </option>
-              ))}
+              <option value="">Select Type</option>
+              <option value="car_symbol">Car Symbol</option>
+              <option value="website_logo">Website Logo</option>
             </select>
-
-            {errors.country && (
-              <p className="text-red-500 text-xs">{errors.country.message}</p>
+            {errors.type && (
+              <p className="text-red-500 text-xs">{errors.type.message}</p>
             )}
           </div>
 
@@ -121,33 +124,26 @@ const CreateCarBrand: React.FC = () => {
               Description
             </label>
             <textarea
-              placeholder="Enter car brand description"
-              {...register("description", {
-                required: "Description is required",
-              })}
+              placeholder="Enter description"
+              {...register("description", { required: "Description is required" })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
             {errors.description && (
-              <p className="text-red-500 text-xs">
-                {errors.description.message}
-              </p>
+              <p className="text-red-500 text-xs">{errors.description.message}</p>
             )}
           </div>
 
           {/* Image Upload */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Upload Image
+              Upload New Image (Optional)
             </label>
             <input
               type="file"
               accept="image/*"
-              {...register("image", { required: "Image is required" })}
+              {...register("image")}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
-            {errors.image && (
-              <p className="text-red-500 text-xs">{errors.image.message}</p>
-            )}
           </div>
 
           {/* Submit Button */}
@@ -159,19 +155,14 @@ const CreateCarBrand: React.FC = () => {
             className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold shadow-md flex justify-center items-center gap-2"
           >
             {isLoading && <Loader2 className="animate-spin" size={20} />}
-            {isLoading ? "Creating..." : "Create Car Brand"}
+            {isLoading ? "Updating..." : "Update Image"}
           </motion.button>
 
-          {/* Success or Error Feedback */}
           {isSuccess && (
-            <p className="text-green-500 text-center mt-2">
-              Car Brand Created!
-            </p>
+            <p className="text-green-500 text-center mt-2">Image updated!</p>
           )}
           {isError && (
-            <p className="text-red-500 text-center mt-2">
-              Failed to create car brand
-            </p>
+            <p className="text-red-500 text-center mt-2">Failed to update image</p>
           )}
         </form>
       </motion.div>
@@ -179,4 +170,4 @@ const CreateCarBrand: React.FC = () => {
   );
 };
 
-export default CreateCarBrand;
+export default UpdateImage;

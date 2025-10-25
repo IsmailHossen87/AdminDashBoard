@@ -3,14 +3,13 @@ import { baseApi } from "../baseApi";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // POST request to add a division
-    register: builder.mutation({
+    createAdmin: builder.mutation({
       query: (authData) => ({
-        url: "/users",
+        url: "/admin/create-admin",
         method: "POST",
         body: authData, 
       }),
-      invalidatesTags: ["AUTH"], 
+      invalidatesTags: ["ADMIN"], 
     }),
     Login: builder.mutation({
       query: (authData) => ({
@@ -30,6 +29,15 @@ export const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["ADMIN"],
     }),
+    // ✅ Personal admin data
+    getProfile: builder.query({
+      query: (params) => ({
+        url: "/users/profile",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["ADMIN"],
+    }),
     // DELETE ADMIN
      deleteAdmin: builder.mutation({
       query: (adminId) => ({
@@ -43,4 +51,4 @@ export const authApi = baseApi.injectEndpoints({
   overrideExisting: false, 
 });
 
-export const { useRegisterMutation,useGetAllAdminQuery, useLoginMutation,useDeleteAdminMutation } = authApi;
+export const { useCreateAdminMutation,useGetAllAdminQuery,useGetProfileQuery, useLoginMutation,useDeleteAdminMutation } = authApi;
