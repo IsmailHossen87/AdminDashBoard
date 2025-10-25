@@ -2,17 +2,6 @@ import { baseApi } from "../baseApi";
 
 export const adminAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-
-    // ✅ Create Admin
-    createAdmin: builder.mutation({
-      query: (authData) => ({
-        url: "/admin/create-admin",
-        method: "POST",
-        body: authData,
-      }),
-      invalidatesTags: ["ADMIN"],
-    }),
-
     // // ✅ Create Car Brand
     // createCarBrand: builder.mutation({
     //   query: (body) => ({
@@ -193,7 +182,6 @@ export const adminAPI = baseApi.injectEndpoints({
 
 export const {
   // ✅ Create
-  useCreateAdminMutation,
   useCreateCarBrandMutation,
   useCreateCarModelMutation,
 

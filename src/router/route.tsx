@@ -15,6 +15,8 @@ import WorkShopDetails from "../Page/workShop/workShopDetails";
 import Cars from "../Page/CAR/GetAllCar";
 import CarDetails from "../Page/CAR/CarDetails";
 import UpdateWorkShop from "../Page/workShop/UpdateWorkShop";
+import Profile from "../Page/Profile";
+import Settings from "../Page/Setting/getSetting";
 
 const Routes = createBrowserRouter([
   {
@@ -28,7 +30,7 @@ const Routes = createBrowserRouter([
       },
        {
         path: "admin/profile",
-        element: <Dashboard/>,
+        element: <Profile/>,
       },
        {
         path: "admin/dashboard",
@@ -63,8 +65,13 @@ const Routes = createBrowserRouter([
         element: <Cars/>,
       },
        {
-        path: "signUp",
-        element: <Register/>,
+        path: "createAdmin",
+        element: <CreateAdmin/>,
+      },
+      // SETTING
+       {
+        path: "admin/setting",
+        element: <Settings/>,
       },
        {
         path: "login",

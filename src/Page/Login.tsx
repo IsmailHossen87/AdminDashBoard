@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import type { FieldValues } from "react-hook-form";
+import { useForm, type FieldValues } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, LogIn } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../redux/feature/authApi";
 import { toast } from "react-toastify";
 
@@ -12,18 +11,16 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
-  const [loginInfo] = useLoginMutation();
+  const [login] = useLoginMutation();
 
   const onSubmit = async (data: any) => {
     try {
       setIsLoading(true);
-      const res = await loginInfo(data).unwrap();
-
-      localStorage.setItem("accessToken", res.data.accessToken);
-      localStorage.setItem("refreshToken", res.data.refreshToken);
+      const res = await login(data).unwrap();
 
       if (res.success) {
+        localStorage.setItem("accessToken", res.data.accessToken);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
         toast.success("Logged in Successfully");
         navigate("/admin/dashboard");
       }
@@ -35,7 +32,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen from-indigo-100 via-white to-indigo-100">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 via-white to-indigo-100">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -52,14 +49,12 @@ const Login: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Contact Field */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Contact
-            </label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Contact</label>
             <input
               type="text"
               placeholder="Enter Contact Number"
               {...register("contact", { required: "Contact is required" })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition duration-200"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200"
             />
             {errors.contact && (
               <p className="text-red-500 text-xs mt-1">{String(errors.contact.message)}</p>
@@ -68,15 +63,13 @@ const Login: React.FC = () => {
 
           {/* Password Field */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Password
-            </label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 {...register("password", { required: "Password is required" })}
-                className="w-full px-4 py-2 border placeholder-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent outline-none transition duration-200 pr-10"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-indigo-400 focus:border-transparent pr-10 transition duration-200"
               />
               <button
                 type="button"
@@ -91,7 +84,7 @@ const Login: React.FC = () => {
             )}
           </div>
 
-          {/* Submit Button with Loading */}
+          {/* Submit Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
@@ -108,29 +101,22 @@ const Login: React.FC = () => {
                 fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8H4z"
-                ></path>
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
               </svg>
             ) : (
-              <><LogIn size={18} /> Login</>
+              <>
+                <LogIn size={18} /> Login
+              </>
             )}
           </motion.button>
 
           {/* Footer */}
           <p className="text-center text-sm text-gray-600 mt-4">
             Don’t have an account?{" "}
-            <Link className="text-indigo-600 hover:underline" to={"/signUp"}>Register</Link>
+            <Link className="text-indigo-600 hover:underline" to="/createAdmin">
+              Create Admin
+            </Link>
           </p>
         </form>
       </motion.div>

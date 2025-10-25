@@ -5,9 +5,10 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router"; 
 import { FiEyeOff } from "react-icons/fi";
 import { BsEye } from "react-icons/bs";
-import { useRegisterMutation } from "../redux/feature/authApi";
+
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCreateAdminMutation } from "../redux/feature/authApi";
 
 const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,7 +26,7 @@ const Register: React.FC = () => {
   } = useForm<FieldValues>();
 
   // Register mutation hook
-  const [registerUser] = useRegisterMutation();
+  const [registerUser] = useCreateAdminMutation();
 
   const onSubmit = async (data: any) => {
     setLoading(true); // Set loading to true when the user submits
@@ -46,7 +47,7 @@ const Register: React.FC = () => {
         toast.error("Registration failed! Please try again.");
       }
     } finally {
-      setLoading(false); // Set loading to false once the process is done
+      setLoading(false); 
     }
   };
 
