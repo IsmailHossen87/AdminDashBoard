@@ -1,17 +1,41 @@
 import { motion } from "framer-motion";
 import { MessageSquare, Phone, Trash2 } from "lucide-react";
-import { useAllMessageQuery, useDeleteMessageMutation, } from "../redux/feature/adminApi";
+import {
+  useAllMessageQuery,
+  useDeleteMessageMutation,
+} from "../redux/feature/adminApi";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const MessageList = () => {
-  const { data: messages, isLoading, isError, refetch } = useAllMessageQuery(undefined);
+  const {
+    data: messages,
+    isLoading,
+    isError,
+    refetch,
+  } = useAllMessageQuery(undefined);
   const [deleteMessage, { isLoading: isDeleting }] = useDeleteMessageMutation();
-  const handleDelete = async (id: string) => {
 
+  const handleDelete = async (id: string) => {
     try {
-      await deleteMessage(id).unwrap();
-      toast.success("Message deleted successfully!");
-      refetch(); 
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
+      if (result.isConfirmed) {
+        await deleteMessage(id).unwrap();
+        refetch();
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
     } catch (error) {
       toast.error("Failed to delete message!");
     }

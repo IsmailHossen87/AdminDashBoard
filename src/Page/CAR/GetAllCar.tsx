@@ -1,8 +1,12 @@
 import React from "react";
 import { Loader2, Trash2, Eye } from "lucide-react";
-import { useAllCarQuery, useDeleteCarMutation } from "../../redux/feature/adminApi";
+import {
+  useAllCarQuery,
+  useDeleteCarMutation,
+} from "../../redux/feature/adminApi";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 type MaybeObjWithTitle = { title?: string } | string | undefined | null;
 type MaybeImage = string | { url?: string } | undefined | null;
@@ -18,10 +22,24 @@ const Cars: React.FC = () => {
   const [deleteCar, { isLoading: isDeleting }] = useDeleteCarMutation();
 
   const handleDelete = async (carId: string) => {
-    if (!window.confirm("Are you sure you want to delete this car?")) return;
     try {
-      await deleteCar(carId).unwrap();
-      toast.success("Car deleted successfully!");
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
+      if (result.isConfirmed) {
+        await deleteCar(carId).unwrap();
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to delete car");
     }
@@ -75,11 +93,14 @@ const Cars: React.FC = () => {
 
             {cars.map((car: any, index: number) => {
               const brandTitle = toTitle(car.brand);
-              const brandImage = toImageUrl(car.brand?.image ?? car.brand?.logo ?? car.brand?.img);
+              const brandImage = toImageUrl(
+                car.brand?.image ?? car.brand?.logo ?? car.brand?.img
+              );
               const modelTitle = toTitle(car.model);
               const year = String(car.year || "-");
               const vin = car.vin || "-";
-              const clientName = toTitle(car.client?.clientId) || car.client?.name || "-";
+              const clientName =
+                toTitle(car.client?.clientId) || car.client?.name || "-";
               const carType = car.carType || "-";
 
               let plateNumber = "-";
@@ -100,7 +121,9 @@ const Cars: React.FC = () => {
                         alt={brandTitle}
                         className="w-10 h-10 rounded-full object-cover border-2 border-indigo-300"
                       />
-                      <span className="font-medium text-gray-700">{brandTitle}</span>
+                      <span className="font-medium text-gray-700">
+                        {brandTitle}
+                      </span>
                     </div>
                   </td>
 
@@ -119,7 +142,11 @@ const Cars: React.FC = () => {
                         className="flex items-center justify-center p-2 bg-red-500 hover:bg-red-600 text-white rounded-full transition disabled:opacity-60"
                         title="Delete"
                       >
-                        {isDeleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                        {isDeleting ? (
+                          <Loader2 size={16} className="animate-spin" />
+                        ) : (
+                          <Trash2 size={16} />
+                        )}
                       </button>
 
                       <Link

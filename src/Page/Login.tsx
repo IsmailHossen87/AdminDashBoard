@@ -22,7 +22,7 @@ const Login: React.FC = () => {
         localStorage.setItem("accessToken", res.data.accessToken);
         localStorage.setItem("refreshToken", res.data.refreshToken);
         toast.success("Logged in Successfully");
-        navigate("/admin/dashboard");
+        navigate("/admin/profile");
       }
     } catch (error: any) {
       toast.error(error?.data?.message || "Login failed");
@@ -109,15 +109,7 @@ const Login: React.FC = () => {
                 <LogIn size={18} /> Login
               </>
             )}
-          </motion.button>
-
-          {/* Footer */}
-          <p className="text-center text-sm text-gray-600 mt-4">
-            Don’t have an account?{" "}
-            <Link className="text-indigo-600 hover:underline" to="/createAdmin">
-              Create Admin
-            </Link>
-          </p>
+          </motion.button> 
         </form>
       </motion.div>
     </div>

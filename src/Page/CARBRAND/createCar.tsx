@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
@@ -6,7 +6,6 @@ import { Loader2 } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router";
 import {
-  useAllBrandQuery,
   useAllCountryQuery,
   useCreateCarBrandMutation,
 } from "../../redux/feature/adminApi";

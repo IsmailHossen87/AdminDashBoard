@@ -14,7 +14,7 @@ const Settings: React.FC = () => {
 
   if (isError) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-red-500 font-semibold">
+      <div className="flex justify-center text-5xl items-center min-h-screen text-red-500 font-semibold">
         Failed to load settings 😢
       </div>
     );

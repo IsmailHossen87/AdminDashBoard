@@ -8,6 +8,7 @@ import { Button, Tooltip } from "antd";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
 import { toast } from "react-toastify";
 import ImageList from "../IMAGE/ImageList";
+import Swal from "sweetalert2";
 
 interface CarModel {
   _id: string;
@@ -25,8 +26,23 @@ const CarModelTable = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteCarBrand(id).unwrap();
-      toast.success("Model deleted successfully!");
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      })
+        if (result.isConfirmed) {
+          await deleteCarBrand(id).unwrap();
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
     } catch {
       toast.error("Failed to delete the model.");
     }
@@ -76,7 +92,9 @@ const CarModelTable = () => {
                 <table className="w-full border-collapse text-sm md:text-base">
                   <thead>
                     <tr className="bg-linear-to-r from-indigo-100 to-pink-100 text-gray-800 uppercase text-xs md:text-sm font-semibold tracking-wide">
-                      <th className="px-5 py-3 text-left rounded-tl-xl">Title</th>
+                      <th className="px-5 py-3 text-left rounded-tl-xl">
+                        Title
+                      </th>
                       <th className="px-5 py-3 text-left">Brand</th>
                       <th className="px-5 py-3 text-left">Created At</th>
                       <th className="px-5 py-3 text-center rounded-tr-xl">
@@ -89,9 +107,7 @@ const CarModelTable = () => {
                       <tr
                         key={carModel._id}
                         className={`${
-                          index % 2 === 0
-                            ? "bg-white/40"
-                            : "bg-white/30"
+                          index % 2 === 0 ? "bg-white/40" : "bg-white/30"
                         } hover:bg-indigo-50 transition duration-200`}
                       >
                         <td className="px-5 py-3 font-medium text-gray-800">

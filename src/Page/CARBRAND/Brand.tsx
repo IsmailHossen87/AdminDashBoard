@@ -1,25 +1,51 @@
-import { Loader2 } from "lucide-react"; // Loading spinner icon
-import { useAllBrandQuery, useDeleteBrandMutation,  } from "../../redux/feature/adminApi";
+import { Delete, Loader2 } from "lucide-react"; // Loading spinner icon
+import {
+  useAllBrandQuery,
+  useDeleteBrandMutation,
+} from "../../redux/feature/adminApi";
 import { motion } from "framer-motion"; // Import motion from framer-motion
 import { Link } from "react-router-dom";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
-import { toast } from "react-toastify";
 import { FiDelete } from "react-icons/fi";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const CarBrandComponent: React.FC = () => {
   const { data, isLoading, isError } = useAllBrandQuery(undefined);
   const [deleteCarBrand] = useDeleteBrandMutation();
 
-  console.log(data);
 
-  const handleDelete = async (brandId: string) => {
-    try {
+
+const handleDelete = async (brandId: string) => {
+  try {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
       await deleteCarBrand(brandId).unwrap();
-      toast.success("Car Brand deleted successfully!");
-    } catch (error: any) {
-      toast.error("Failed to delete car brand.");
+
+      Swal.fire({
+        title: "Deleted!",
+        text: "The car brand has been deleted.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
     }
-  };
+  } catch (error: any) {
+    toast.error("Failed to delete car brand.");
+    console.error(error);
+  }
+};
+
 
   if (isLoading) {
     return (
@@ -44,7 +70,9 @@ const CarBrandComponent: React.FC = () => {
       <div className="mb-8 flex justify-between items-center">
         {/* Left side - Title and Description */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Car Brands & Countries</h1>
+          <h1 className="text-3xl font-bold text-gray-800">
+            Car Brands & Countries
+          </h1>
           <p className="text-gray-500 text-sm mt-2">
             Discover different car brands from around the world
           </p>
@@ -71,23 +99,24 @@ const CarBrandComponent: React.FC = () => {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <img
-              src={brand.image}
+              src={`http://10.10.7.77:8002${brand.image}`}
               alt={brand.title}
               className="w-full h-32 object-cover rounded-lg mb-4"
             />
-            <h3 className="text-lg font-semibold text-gray-800">{brand.title}</h3>
+            <h3 className="text-lg font-semibold text-gray-800">
+              {brand.title}
+            </h3>
 
             {/* Delete Button */}
             <button
               onClick={() => handleDelete(brand._id)}
-              className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+              className="absolute text-2xl top-2 right-2 text-red-500 hover:text-red-700"
             >
-              <FiDelete/>
+              <Delete />
             </button>
           </motion.div>
         ))}
       </div>
-      
     </div>
   );
 };

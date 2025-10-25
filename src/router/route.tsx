@@ -21,111 +21,48 @@ import UpdateImage from "../Page/IMAGE/updateImage";
 import WorkList from "../Page/WORK/workList";
 import CreateWorkForm from "../Page/WORK/work";
 import CreateSpare from "../Page/SPARE/SpareCreate";
+import ProtectedRoute from "../Page/ProtectedRoute";
+import ErrorPage from "../Page/ErrorPage";
+
+
 
 const Routes = createBrowserRouter([
   {
     path: "/",
-    element:<AdminLayout/> ,
-    // errorElement: <Error />,
+    element: <AdminLayout />,
+      errorElement: <ErrorPage />,
     children: [
-       {
-        index:true,
-        element: <Dashboard/>,
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { index: true, element: <Profile /> },
+          { path: "admin/profile", element: <Profile /> },
+          { path: "admin/dashboard", element: <Dashboard /> },
+          { path: "admin/createAdmin", element: <CreateAdmin /> },
+          { path: "admin/message", element: <MessageList /> },
+          { path: "admin/brand", element: <CarBrandComponent /> },
+          { path: "admin/carmodel", element: <CarModelTable /> },
+          { path: "admin/details/:id", element: <CarBrandDetail /> },
+          { path: "admin/workShop", element: <WorkShop /> },
+          { path: "admin/workList", element: <WorkList /> },
+          { path: "admin/addWork", element: <CreateWorkForm /> },
+          { path: "admin/Spare", element: <CreateSpare /> },
+          { path: "admin/car", element: <Cars /> },
+          { path: "admin/setting", element: <Settings /> },
+          { path: "create", element: <CreateCarBrand /> },
+          { path: "model", element: <CreateCarModel /> },
+          { path: "imageType", element: <CreateCarImage /> },
+          { path: "image/edit/:id", element: <UpdateImage /> },
+          { path: "UpdateWorkShop/:workshopId", element: <UpdateWorkShop /> },
+          { path: "workShopDetails/:workShopId", element: <WorkShopDetails /> },
+          { path: "carDetails/:carId", element: <CarDetails /> },
+        ],
       },
-       {
-        path: "admin/profile",
-        element: <Profile/>,
-      },
-       {
-        path: "admin/dashboard",
-        element: <Dashboard/>,
-      },
-       {
-        path: "admin/createAdmin",
-        element: <CreateAdmin/>,
-      },
-       {
-        path: "admin/message",
-        element: <MessageList/>,
-      },
-       {
-        path: "admin/brand",
-        element: <CarBrandComponent/>,
-      },
-       {
-        path: "admin/carmodel",
-        element: <CarModelTable/>,
-      },
-       {
-        path: "admin/details/:id",
-        element: <CarBrandDetail/>,
-      },
-       {
-        path: "admin/workShop",
-        element: <WorkShop/>,
-      },
-      // spare/work
-       {
-        path: "admin/workList",
-        element: <WorkList/>,
-      },
-       {
-        path: "admin/addWork",
-        element: <CreateWorkForm/>,
-      },
-       {
-        path: "admin/Spare",
-        element: <CreateSpare/>,
-      },
-       {
-        path: "admin/car",
-        element: <Cars/>,
-      },
-       {
-        path: "createAdmin",
-        element: <CreateAdmin/>,
-      },
-      // SETTING
-       {
-        path: "admin/setting",
-        element: <Settings/>,
-      },
-       {
-        path: "login",
-        element: <Login/>,
-      },
-       {
-        path: "create",
-        element: <CreateCarBrand/>,
-      },
-       {
-        path: "model",
-        element: <CreateCarModel/>,
-      },
-       {
-        path: "imageType",
-        element: <CreateCarImage/>,
-      },
-       {
-        path: `image/edit/:id`,
-        element: <UpdateImage/>,
-      },
-       {
-        path: "UpdateWorkShop/:workshopId",
-        element: <UpdateWorkShop/>,
-      },
-       {
-        path: "workShopDetails/:workShopId",
-        element: <WorkShopDetails/>,
-      },
-       {
-        path: "carDetails/:carId",
-        element: <CarDetails/>,
-      },
-      
+      // Public route
+      { path: "login", element: <Login /> },
     ],
   },
-
 ]);
+
 
 export default Routes;

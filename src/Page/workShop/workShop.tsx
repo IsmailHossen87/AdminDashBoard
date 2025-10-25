@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Loader2,
   MapPin,
-  Phone,
   Building2,
   Calendar,
   CreditCard,
@@ -12,8 +11,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Trash2,
-  Eye,
-  EyeIcon,
   Edit,
 } from "lucide-react";
 import { toast } from "react-toastify";
@@ -21,8 +18,9 @@ import {
   useAllWorkShopQuery,
   useDeleteWorkShopMutation,
 } from "../../redux/feature/adminApi";
-import { Link, useNavigate } from "react-router";
-import { MdOutlineCreateNewFolder } from "react-icons/md";
+import { Link } from "react-router";
+import Swal from "sweetalert2";
+
 
 const WorkShop = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,19 +28,35 @@ const WorkShop = () => {
   const [deleteWorkShop, { isLoading: isDeleting }] =
     useDeleteWorkShopMutation();
 
-  // Delete function
-  const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this workshop?"))
-      return;
+// delete
+const handleDelete = async (id: string) => {
+  try {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
 
-    try {
+    if (result.isConfirmed) {
       await deleteWorkShop(id).unwrap();
-      toast.success("Workshop deleted successfully!");
-    } catch (error: any) {
-      console.error(error);
-      toast.error(error?.data?.message || "Failed to delete workshop");
+      await Swal.fire({
+        title: "Deleted!",
+        text: "The workshop has been deleted.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
     }
-  };
+  } catch (error: any) {
+    console.error(error);
+    toast.error(error?.data?.message || "Failed to delete workshop");
+  }
+};
+
 
   const {
     data: WorkShopData,

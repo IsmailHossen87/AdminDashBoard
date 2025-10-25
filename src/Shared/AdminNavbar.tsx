@@ -7,6 +7,7 @@ import {
   MessageCircle,
   Car,
   Settings,
+  Sparkle,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { NavLink, Link } from "react-router-dom";
@@ -37,7 +38,7 @@ const AdminNavbar: React.FC = () => {
     { name: "Messages", icon: MessageCircle, path: "/admin/message" },
     { name: "Setting", icon: Settings, path: "/admin/setting" },
     { name: "Work", icon: Settings, path: "/admin/workList" },
-    { name: "Spare", icon: Settings, path: "/admin/Spare" },
+    { name: "Spare", icon: Sparkle, path: "/admin/Spare" },
   ];
 
   const checkLoginStatus = () => {
