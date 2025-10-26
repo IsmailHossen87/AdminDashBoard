@@ -63,25 +63,25 @@ const Cars: React.FC = () => {
 
   const cars = data?.data?.result || data?.result || []; 
 
-  // cars?.map(b=>console.log(b?.client))
+  console.log(cars);
 
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-6 text-indigo-700">Cars List</h2>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow rounded-lg">
-          <thead>
-            <tr className="bg-indigo-100 text-left">
-              <th className="px-4 py-2">Sirial</th>
-              <th className="px-4 py-2">Brand</th>
-              <th className="px-4 py-2">Model</th>
-              <th className="px-4 py-2">Year</th>
-              <th className="px-4 py-2">VIN</th>
-              <th className="px-4 py-2">Client Name</th>
-              <th className="px-4 py-2">Car Type</th>
-              <th className="px-4 py-2">Plate Number</th>
-              <th className="px-4 py-2">Actions</th>
+        <table className="min-w-full  shadow rounded-lg">
+          <thead className="bg-linear-to-r from-blue-500  via-purple-500 to-pink-500 text-white">
+            <tr className=" text-left">
+              <th className="px-4 py-2 text-left">Sirial</th>
+              <th className="px-4 py-2 text-left">Brand</th>
+              <th className="px-4 py-2 text-left">Model</th>
+              <th className="px-4 py-2 text-left">Year</th>
+              <th className="px-4 py-2 text-left">VIN</th>
+              <th className="px-4 py-2 text-left">Client Name</th>
+              <th className="px-4 py-2 text-left">Car Type</th>
+              <th className="px-4 py-2 text-left">Plate Number</th>
+              <th className="px-4 py-2 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -102,7 +102,7 @@ const Cars: React.FC = () => {
               const year = String(car.year || "-");
               const vin = car.vin || "-";
               const clientName =
-                toTitle(car.client?.clientId) || car.client?.name || "-";
+                toTitle(car.client?.clientId?.name);
               const carType = car.carType || "-";
 
               let plateNumber = "-";
@@ -114,9 +114,9 @@ const Cars: React.FC = () => {
 
               return (
                 <tr key={car._id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2 text-center">{index + 1}</td>
+                  <td className="px-4 py-2  text-center">{index + 1}</td>
 
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2 text-left">
                     <div className="flex items-center gap-2">
                       <img
                         src={brandImage}
@@ -129,14 +129,14 @@ const Cars: React.FC = () => {
                     </div>
                   </td>
 
-                  <td className="px-4 py-2">{modelTitle}</td>
-                  <td className="px-4 py-2">{year}</td>
-                  <td className="px-4 py-2">{vin}</td>
-                  <td className="px-4 py-2">{clientName}</td>
-                  <td className="px-4 py-2">{carType}</td>
-                  <td className="px-4 py-2">{plateNumber}</td>
+                  <td className="px-4 py-2 text-left">{modelTitle}</td>
+                  <td className="px-4 py-2 text-left">{year}</td>
+                  <td className="px-4 py-2 text-left">{vin}</td>
+                  <td className="px-4 py-2 text-left">{clientName}</td>
+                  <td className="px-4 py-2 text-left">{carType}</td>
+                  <td className="px-4 py-2 text-left">{plateNumber}</td>
 
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2 text-left">
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleDelete(car._id)}

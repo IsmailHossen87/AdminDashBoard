@@ -136,7 +136,7 @@ const ImageList: React.FC = () => {
                   src={`http://10.10.7.77:8002${img.image}`}
                   alt={img.title}
                   className="w-full h-48 object-cover"
-                  onClick={() => navigate(`/image/${img._id}`)}
+                  // onClick={() => navigate(`/image/${img._id}`)}
                 />
                 <div className="p-4">
                   <h3 className="font-semibold text-gray-800">{img.title}</h3>

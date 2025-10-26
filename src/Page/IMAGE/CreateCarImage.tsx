@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router";
-import { useCreateCarBrandMutation, useCreateImageMutation } from "../../redux/feature/adminApi";
+import {  useCreateImageMutation } from "../../redux/feature/adminApi";
 
 interface FormData {
   title: string;

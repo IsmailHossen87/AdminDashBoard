@@ -19,6 +19,7 @@ const UpdateImage: React.FC = () => {
   const navigate = useNavigate();
 
   const { data, isLoading: isFetching } = useGetSingleImageQuery(id);
+  
   const [updateImage, { isLoading, isSuccess, isError }] = useUpdateImageMutation();
 
   const {

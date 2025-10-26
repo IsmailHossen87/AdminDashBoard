@@ -16,7 +16,7 @@ import { NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sidebarSlice";
 import { VscSignIn } from "react-icons/vsc";
-import { MdBrandingWatermark, MdWorkHistory } from "react-icons/md";
+import { MdBrandingWatermark, MdWork, MdWorkHistory } from "react-icons/md";
 import type { RootState } from "../redux/store";
 
 interface MenuItem {
@@ -32,28 +32,28 @@ const AdminNavbar: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
 
-  const menuItems: MenuItem[] = [
-    { name: "Profile", icon: User, path: "/admin/profile" },
-    { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
-    { name: "Car", icon: Car, path: "/admin/car" },
-    { name: "Brand", icon: MdBrandingWatermark, path: "/admin/brand" },
-    { name: "Car Model", icon: Car, path: "/admin/carmodel" },
-    { name: "Workshop", icon: MdWorkHistory, path: "/admin/workShop" },
-    { name: "Messages", icon: MessageCircle, path: "/admin/message" },
-    {
-      name: "Setting",
-      icon: Settings,
-      subItems: [
-        { name: "Privacy Policy", path: "/admin/privacy-policy" },
-        { name: "About Us", path: "/admin/about-us" },
-        { name: "Support", path: "/admin/support" },
-        { name: "Service", path: "/admin/service" },
-        { name: "Account Delete", path: "/admin/account-delete" },
-      ],
-    },
-    { name: "Work", icon: Settings, path: "/admin/workList" },
-    { name: "Spare", icon: Sparkle, path: "/admin/Spare" },
-  ];
+const menuItems: MenuItem[] = [
+  { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
+  { name: "Profile", icon: User, path: "/admin/profile" },
+  { name: "Car", icon: Car, path: "/admin/car" },
+  { name: "Brand", icon: MdBrandingWatermark, path: "/admin/brand" },
+  { name: "Car Model", icon: Car, path: "/admin/carmodel" },
+  { name: "Workshop", icon: MdWorkHistory, path: "/admin/workShop" },
+  { name: "Work", icon: MdWork, path: "/admin/workList" },
+  { name: "Spare", icon: Sparkle, path: "/admin/Spare" },
+  { name: "Messages", icon: MessageCircle, path: "/admin/message" },
+  {
+    name: "Setting",
+    icon: Settings,
+    subItems: [
+      { name: "Privacy Policy", path: "/admin/privacy-policy" },
+      { name: "About Us", path: "/admin/about-us" },
+      { name: "Support", path: "/admin/support" },
+      { name: "Service", path: "/admin/service" },
+      { name: "Account Delete", path: "/admin/account-delete" },
+    ],
+  },
+];
 
   const checkLoginStatus = () => {
     const token = localStorage.getItem("accessToken");
