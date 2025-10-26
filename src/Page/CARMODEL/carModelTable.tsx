@@ -22,7 +22,8 @@ interface CarModel {
 
 const CarModelTable = () => {
   const { data, error, isLoading } = useAllCarModelQuery(undefined);
-  const [deleteCarBrand] = useDeletecarModelMutation();
+  const [deleteCarBrand] = useDeletecarModelMutation(); 
+
 
   const handleDelete = async (id: string) => {
     try {

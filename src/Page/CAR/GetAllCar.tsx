@@ -61,7 +61,9 @@ const Cars: React.FC = () => {
     );
   }
 
-  const cars = data?.data?.result || data?.result || [];
+  const cars = data?.data?.result || data?.result || []; 
+
+  // cars?.map(b=>console.log(b?.client))
 
   return (
     <div className="p-6">
@@ -71,7 +73,7 @@ const Cars: React.FC = () => {
         <table className="min-w-full bg-white shadow rounded-lg">
           <thead>
             <tr className="bg-indigo-100 text-left">
-              <th className="px-4 py-2">#</th>
+              <th className="px-4 py-2">Sirial</th>
               <th className="px-4 py-2">Brand</th>
               <th className="px-4 py-2">Model</th>
               <th className="px-4 py-2">Year</th>

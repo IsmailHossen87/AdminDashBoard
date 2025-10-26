@@ -8,6 +8,8 @@ import {
   Car,
   Settings,
   Sparkle,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { NavLink, Link } from "react-router-dom";
@@ -19,14 +21,16 @@ import type { RootState } from "../redux/store";
 
 interface MenuItem {
   name: string;
-  path: string;
+  path?: string;
   icon: React.ElementType;
+  subItems?: { name: string; path: string }[];
 }
 
 const AdminNavbar: React.FC = () => {
   const dispatch = useDispatch();
   const { isCollapsed } = useSelector((state: RootState) => state.sidebar);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(false);
 
   const menuItems: MenuItem[] = [
     { name: "Profile", icon: User, path: "/admin/profile" },
@@ -36,7 +40,17 @@ const AdminNavbar: React.FC = () => {
     { name: "Car Model", icon: Car, path: "/admin/carmodel" },
     { name: "Workshop", icon: MdWorkHistory, path: "/admin/workShop" },
     { name: "Messages", icon: MessageCircle, path: "/admin/message" },
-    { name: "Setting", icon: Settings, path: "/admin/setting" },
+    {
+      name: "Setting",
+      icon: Settings,
+      subItems: [
+        { name: "Privacy Policy", path: "/admin/privacy-policy" },
+        { name: "About Us", path: "/admin/about-us" },
+        { name: "Support", path: "/admin/support" },
+        { name: "Service", path: "/admin/service" },
+        { name: "Account Delete", path: "/admin/account-delete" },
+      ],
+    },
     { name: "Work", icon: Settings, path: "/admin/workList" },
     { name: "Spare", icon: Sparkle, path: "/admin/Spare" },
   ];
@@ -83,21 +97,75 @@ const AdminNavbar: React.FC = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="flex-1 mt-4 space-y-1"
+        className="flex-1 mt-4 space-y-1 overflow-y-auto"
       >
-        {menuItems.map(({ name, icon: Icon, path }) => (
-          <NavLink
-            key={name}
-            to={path}
-            className={({ isActive }) =>
-              `flex items-center w-full p-3 rounded-md transition-all ${
-                isActive ? "bg-linear-to-tr from-blue-500 via-purple-500 font-bold to-pink-500 text-white " : "hover:bg-pink-500"
-              }`
-            }
-          >
-            <Icon size={20} />
-            {!isCollapsed && <span className="ml-3">{name}</span>}
-          </NavLink>
+        {menuItems.map(({ name, icon: Icon, path, subItems }) => (
+          <div key={name}>
+            {subItems ? (
+              <>
+                {/* Dropdown Parent */}
+                <button
+                  onClick={() => setOpenDropdown((prev) => !prev)}
+                  className={`flex items-center justify-between  w-full p-3 rounded-md transition-all ${
+                    openDropdown
+                      ? "bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 text-white font-bold"
+                      : "hover:bg-pink-500"
+                  }`}
+                >
+                  <div className="flex items-center">
+                    <Icon size={20} />
+                    {!isCollapsed && <span className="ml-3">{name}</span>}
+                  </div>
+                  {!isCollapsed &&
+                    (openDropdown ? (
+                      <ChevronUp size={18} />
+                    ) : (
+                      <ChevronDown size={18} />
+                    ))}
+                </button>
+
+                {/* Dropdown Items */}
+                {openDropdown && !isCollapsed && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="ml-10 mt-1 space-y-1"
+                  >
+                    {subItems.map((sub) => (
+                      <NavLink
+                        key={sub.name}
+                        to={sub.path}
+                        className={({ isActive }) =>
+                          `block text-sm p-2 rounded-md transition-all ${
+                            isActive
+                              ? "bg-blue-600 font-semibold"
+                              : "hover:bg-blue-500"
+                          }`
+                        }
+                      >
+                        {sub.name}
+                      </NavLink>
+                    ))}
+                  </motion.div>
+                )}
+              </>
+            ) : (
+              // Normal menu item
+              <NavLink
+                to={path!}
+                className={({ isActive }) =>
+                  `flex items-center w-full p-3 rounded-md transition-all ${
+                    isActive
+                      ? "bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 font-bold text-white"
+                      : "hover:bg-pink-500"
+                  }`
+                }
+              >
+                <Icon size={20} />
+                {!isCollapsed && <span className="ml-3">{name}</span>}
+              </NavLink>
+            )}
+          </div>
         ))}
       </motion.div>
 

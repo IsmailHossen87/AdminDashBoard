@@ -27,10 +27,10 @@ const CarDetails: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 py-10 px-6">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100 py-10 px-6">
       <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-100">
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-indigo-600 to-blue-500 p-6 text-white flex items-center justify-between">
+        <div className="bg-linear-to-r from-indigo-600 to-blue-500 p-6 text-white flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold">{car.brand?.title} - {car.model}</h2>
             <p className="text-sm opacity-80 mt-1">VIN: {car.vin || "Not Available"}</p>
