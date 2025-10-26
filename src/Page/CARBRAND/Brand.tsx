@@ -3,10 +3,9 @@ import {
   useAllBrandQuery,
   useDeleteBrandMutation,
 } from "../../redux/feature/adminApi";
-import { motion } from "framer-motion"; // Import motion from framer-motion
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
-import { FiDelete } from "react-icons/fi";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 

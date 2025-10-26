@@ -15,7 +15,6 @@ import Cars from "../Page/CAR/GetAllCar";
 import CarDetails from "../Page/CAR/CarDetails";
 import UpdateWorkShop from "../Page/workShop/UpdateWorkShop";
 import Profile from "../Page/Profile";
-import Settings from "../Page/Setting/getSetting";
 import CreateCarImage from "../Page/IMAGE/CreateCarImage";
 import UpdateImage from "../Page/IMAGE/updateImage";
 import WorkList from "../Page/WORK/workList";
@@ -23,6 +22,11 @@ import CreateWorkForm from "../Page/WORK/work";
 import CreateSpare from "../Page/SPARE/SpareCreate";
 import ProtectedRoute from "../Page/ProtectedRoute";
 import ErrorPage from "../Page/ErrorPage";
+import PrivacyPolicy from "../Page/Setting/PrivacyPolicy";
+import AboutUs from "../Page/Setting/AboutUs";
+import Support from "../Page/Setting/Support";
+import Service from "../Page/Setting/Service";
+import AccountDelete from "../Page/Setting/AccountDelete";
 
 
 
@@ -48,7 +52,13 @@ const Routes = createBrowserRouter([
           { path: "admin/addWork", element: <CreateWorkForm /> },
           { path: "admin/Spare", element: <CreateSpare /> },
           { path: "admin/car", element: <Cars /> },
-          { path: "admin/setting", element: <Settings /> },
+          // { path: "admin/setting", element: <Settings /> },
+          // SETTING
+           { path: "admin/privacy-policy", element: <PrivacyPolicy /> },
+            { path: "admin/about-us", element: <AboutUs /> },
+             { path: "admin/support", element: <Support /> },
+              { path: "admin/service", element: <Service /> },
+               { path: "admin/account-delete", element: <AccountDelete /> },
           { path: "create", element: <CreateCarBrand /> },
           { path: "model", element: <CreateCarModel /> },
           { path: "imageType", element: <CreateCarImage /> },
