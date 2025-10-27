@@ -168,8 +168,8 @@ const WorkShop = () => {
           </div>
         </div>
 
-        <div className="bg-[#FDCB00] rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
-          <div className="p-3 bg-[#F8A800] rounded-full text-white">
+        <div className="bg-amber-800 rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
+          <div className="p-3 bg-amber-900 rounded-full text-white">
             <CheckCircle size={28} />
           </div>
           <div>

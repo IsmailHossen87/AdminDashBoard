@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { useCreateWorkMutation } from "../../redux/feature/work";
+import { useNavigate } from "react-router";
 
 
 interface ITitleObj {
@@ -21,7 +22,8 @@ interface IFormInput {
 }
 
 const CreateWorkForm: React.FC = () => {
-  const [createSpare, { isLoading }] = useCreateWorkMutation();
+  const [createSpare, { isLoading }] = useCreateWorkMutation(); 
+  const navigate = useNavigate()
   const { register, handleSubmit, reset } = useForm<IFormInput>({
     defaultValues: {
       titleObj: { ar: "", bn: "", ur: "", hi: "",ti: "",en: "" },
@@ -34,6 +36,7 @@ const CreateWorkForm: React.FC = () => {
     try {
       await createSpare(data).unwrap();
       toast.success("Data submitted successfully!");
+      navigate("/admin/workList")
       reset();
     } catch (error: any) {
       toast.error("Failed to submit data.");

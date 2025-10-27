@@ -38,7 +38,7 @@ const WorkListTable: React.FC = () => {
           <thead className="bg-linear-to-tr from-blue-100 to-purple-100 text-gray-700">
             <tr>
               <th className="py-3 px-4 text-left font-semibold border-b">
-                #
+                Sirial
               </th>
               <th className="py-3 px-4 text-left font-semibold border-b">
                 English Title

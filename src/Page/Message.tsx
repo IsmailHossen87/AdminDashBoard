@@ -62,7 +62,7 @@ const MessageList = () => {
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-6">
       <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-        User Messages
+        User Feedback Messages
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

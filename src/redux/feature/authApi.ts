@@ -36,7 +36,7 @@ export const authApi = baseApi.injectEndpoints({
         method: "GET",
         params,
       }),
-      providesTags: ["ADMIN"],
+      providesTags: ["AUTH"],
     }),
     // DELETE ADMIN
      deleteAdmin: builder.mutation({

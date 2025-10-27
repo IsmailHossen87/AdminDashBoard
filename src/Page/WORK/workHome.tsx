@@ -3,10 +3,12 @@ import CreateWorkForm from "./work";
 import { Upload, FileSpreadsheet, ClipboardEdit } from "lucide-react";
 import { toast } from "react-toastify";
 import { useCreateWorkByFileMutation } from "../../redux/feature/work";
+import { useNavigate } from "react-router";
 
 const WorkFromOrFileUpload: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"form" | "file">("form");
   const [uploadFile] = useCreateWorkByFileMutation();
+  const navigate = useNavigate()
 
   // Handle Excel file upload
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +25,8 @@ const WorkFromOrFileUpload: React.FC = () => {
     try {
       const result = await uploadFile(formData);
       if ("data" in result && result.data?.success) {
-        toast.success(`File "${file.name}" uploaded successfully!`);
+        toast.success(`File "${file.name}" uploaded successfully!`); 
+        navigate("/admin/workList")
       } else if ("error" in result) {
         toast.error("File upload failed! Please try again.");
       }

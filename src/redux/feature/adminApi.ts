@@ -99,6 +99,13 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       providesTags: ["IMAGE"],
     }),
+    logoType: builder.query({
+      query: () => ({
+        url: "images/website_logo",
+        method: "GET",
+      }),
+      providesTags: ["IMAGE"],
+    }),
 
 // ---------------------------------------
     // ✅ Single Brand Fetch
@@ -233,6 +240,7 @@ export const {
   useGetSingleWorkShopQuery,
   useGetSingleCarQuery,
   useGetSingleImageQuery,
+  useLogoTypeQuery,
 
   // ✅ Delete
   useDeleteMessageMutation,

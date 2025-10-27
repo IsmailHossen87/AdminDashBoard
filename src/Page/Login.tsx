@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm, type FieldValues } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, LogIn } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../redux/feature/authApi";
 import { toast } from "react-toastify";
 
@@ -21,6 +21,9 @@ const Login: React.FC = () => {
       if (res.success) {
         localStorage.setItem("accessToken", res.data.accessToken);
         localStorage.setItem("refreshToken", res.data.refreshToken);
+        
+        window.dispatchEvent(new Event('authChange'));
+        
         toast.success("Logged in Successfully");
         navigate("/admin/profile");
       }

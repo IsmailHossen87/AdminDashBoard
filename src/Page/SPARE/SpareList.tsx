@@ -45,9 +45,6 @@ const SparePartsList: React.FC = () => {
         </button>
       </Link>
     </div>
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        All Spare Parts
-      </h2>
 
       {spareParts.length === 0 ? (
         <p className="text-center text-gray-600">No spare parts found.</p>

@@ -17,7 +17,8 @@ const Dashboard = () => {
     isLoading,
     isError,
   } = useGetDashBoardQuery(undefined);
-  const { data: PersonalData } = useGetAllAdminQuery(undefined);
+  const { data: PersonalData } = useGetAllAdminQuery(undefined); 
+  console.log({DashBoard});
 
   if (isLoading) {
     return (
@@ -62,8 +63,8 @@ const Dashboard = () => {
         </div>
 
         {/* Subscriptions Count */}
-        <div className="bg-pink-500 rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
-          <div className="p-3 bg-pink-700 rounded-full text-white">
+        <div className="bg-amber-800 rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
+          <div className="p-3 bg-amber-900 rounded-full text-white">
             <Bookmark size={28} />
           </div>
           <div>
@@ -101,7 +102,7 @@ const Dashboard = () => {
         </div>
 
         {/* Period Info */}
-        <div className="bg-[#4C74B5] rounded-2xl shadow-lg p-6 col-span-2 hover:shadow-xl transition">
+        {/* <div className="bg-[#4C74B5] rounded-2xl shadow-lg p-6 col-span-2 hover:shadow-xl transition">
           <h3 className="text-lg font-semibold text-white mb-2">
             Current Period
           </h3>
@@ -123,7 +124,7 @@ const Dashboard = () => {
               </span>
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* === Admin Info Section === */}

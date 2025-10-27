@@ -35,7 +35,7 @@ createSpare: builder.mutation({
         url: "/works",
         method: "GET",
       }),
-      providesTags: ["SPARE"],
+      providesTags: ["WORK"],
     }),
     // ✅ All SpareQuery
     spareList: builder.query({
