@@ -29,10 +29,18 @@ createSpare: builder.mutation({
       invalidatesTags: ["SPARE"],
     }),
  
-    // ✅ All Messages
+    // ✅ All WorkList
     workList: builder.query({
       query: () => ({
-        url: "/WORKS",
+        url: "/works",
+        method: "GET",
+      }),
+      providesTags: ["SPARE"],
+    }),
+    // ✅ All SpareQuery
+    spareList: builder.query({
+      query: () => ({
+        url: "/spare-parts",
         method: "GET",
       }),
       providesTags: ["SPARE"],
@@ -43,4 +51,4 @@ createSpare: builder.mutation({
   overrideExisting: false, 
 });
 
-export const {useCreateWorkMutation,useCreateWorkByFileMutation,useCreateSpareMutation ,useWorkListQuery} = workApi;
+export const {useCreateWorkMutation,useCreateWorkByFileMutation,useCreateSpareMutation ,useWorkListQuery,useSpareListQuery} = workApi;

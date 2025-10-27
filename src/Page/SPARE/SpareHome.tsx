@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import CreateWorkForm from "./work";
 import { Upload, FileSpreadsheet, ClipboardEdit } from "lucide-react";
 import { toast } from "react-toastify";
 import { useCreateWorkByFileMutation } from "../../redux/feature/work";
+import CreateSpare from "./SpareCreate";
 
-const WorkFromOrFileUpload: React.FC = () => {
+const SpareFromOrFileUpload: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"form" | "file">("form");
   const [uploadFile] = useCreateWorkByFileMutation();
 
@@ -35,7 +35,7 @@ const WorkFromOrFileUpload: React.FC = () => {
 
   return (
     <div className="min-h-screen p-8 bg-gray-50">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Add Work Data</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">Add Spare Data</h2>
 
       {/* Toggle Buttons */}
       <div className="flex gap-4 mb-8">
@@ -68,7 +68,7 @@ const WorkFromOrFileUpload: React.FC = () => {
       {/* Conditional Rendering */}
       <div className="bg-white rounded-2xl shadow-md p-6">
         {activeTab === "form" ? (
-          <CreateWorkForm />
+          <CreateSpare />
         ) : (
           <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-blue-300 rounded-xl">
             <Upload size={48} className="text-blue-500 mb-4" />
@@ -91,4 +91,4 @@ const WorkFromOrFileUpload: React.FC = () => {
   );
 };
 
-export default WorkFromOrFileUpload;
+export default SpareFromOrFileUpload;

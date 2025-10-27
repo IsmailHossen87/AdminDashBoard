@@ -18,54 +18,67 @@ import {
   useAllWorkShopQuery,
   useDeleteWorkShopMutation,
 } from "../../redux/feature/adminApi";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-// workShop
 const WorkShop = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [deleteWorkShop, { isLoading: isDeleting }] =
     useDeleteWorkShopMutation();
 
-// delete
-const handleDelete = async (id: string) => {
-  try {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    });
-
-    if (result.isConfirmed) {
-      await deleteWorkShop(id).unwrap();
-      await Swal.fire({
-        title: "Deleted!",
-        text: "The workshop has been deleted.",
-        icon: "success",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    }
-  } catch (error: any) {
-    console.error(error);
-    toast.error(error?.data?.message || "Failed to delete workshop");
-  }
-};
-
-
   const {
     data: WorkShopData,
     isLoading,
     isError,
+    refetch,
   } = useAllWorkShopQuery({
     page: currentPage,
     limit: limit,
   });
+
+  // Delete handler with confirmation
+  const handleDelete = async (e: React.MouseEvent, id: string, name: string) => {
+    e.preventDefault(); // Prevent Link navigation
+    e.stopPropagation(); // Stop event bubbling
+
+    try {
+      const result = await Swal.fire({
+        title: "Delete Workshop?",
+        html: `Are you sure you want to delete <strong>${name}</strong>?<br/>This action cannot be undone!`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#EF4444",
+        cancelButtonColor: "#6B7280",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "Cancel",
+        reverseButtons: true,
+      });
+
+      if (result.isConfirmed) {
+        await deleteWorkShop(id).unwrap();
+        
+        await Swal.fire({
+          title: "Deleted!",
+          text: `${name} has been deleted successfully.`,
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+
+        // Refresh the list without navigation
+        refetch();
+      }
+    } catch (error: any) {
+      console.error(error);
+      Swal.fire({
+        title: "Error!",
+        text: error?.data?.message || "Failed to delete workshop",
+        icon: "error",
+        confirmButtonColor: "#3B82F6",
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -100,7 +113,7 @@ const handleDelete = async (id: string) => {
 
   // Generate page numbers for pagination
   const getPageNumbers = () => {
-    const pages = [];
+    const pages: (number | string)[] = [];
     const maxVisible = 5;
 
     if (meta.totalPage <= maxVisible) {
@@ -198,13 +211,43 @@ const handleDelete = async (id: string) => {
       {/* Workshop Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {result.map((workshop: any) => (
-          <Link to={`/workShopDetails/${workshop._id}`}>
-            <div
-              key={workshop._id}
-              className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition"
-            >
+          <div
+            key={workshop._id}
+            className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition relative"
+          >
+            {/* Action Buttons - Top Right */}
+            <div className="absolute top-4 right-4 flex gap-2 z-10">
+              {/* Edit Button */}
+              <Link
+                to={`/UpdateWorkShop/${workshop._id}`}
+                onClick={(e) => e.stopPropagation()}
+                className="p-2 bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 text-white rounded-full hover:shadow-lg transition"
+                title="Edit Workshop"
+              >
+                <Edit size={16} />
+              </Link>
+
+              {/* Delete Button */}
+              <button
+                onClick={(e) =>
+                  handleDelete(e, workshop._id, workshop.workshopNameEnglish)
+                }
+                disabled={isDeleting}
+                className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 hover:shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Delete Workshop"
+              >
+                {isDeleting ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Trash2 size={16} />
+                )}
+              </button>
+            </div>
+
+            {/* Card Content - Clickable for Details */}
+            <Link to={`/workShopDetails/${workshop._id}`} className="block">
               {/* Header with Image */}
-              <div className="flex items-start gap-4 mb-4 relative">
+              <div className="flex items-start gap-4 mb-4 pr-20">
                 {/* Workshop Image / Initial */}
                 {workshop.image ? (
                   <img
@@ -227,7 +270,7 @@ const handleDelete = async (id: string) => {
                     {workshop.workshopNameArabic}
                   </p>
 
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-2 mt-1 flex-wrap">
                     {workshop.subscribedPackage ? (
                       <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full flex items-center gap-1">
                         <CheckCircle size={12} /> Active
@@ -244,27 +287,6 @@ const handleDelete = async (id: string) => {
                     )}
                   </div>
                 </div>
-
-                <div className="flex relative">
-                  {/* Delete Button */}
-                  <button
-                    onClick={() => handleDelete(workshop._id)}
-                    disabled={isDeleting}
-                    className="absolute top-0 right-0 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
-                    title="Delete Workshop"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-
-                  {/* Edit Button */}
-                  <Link
-                    to={`/UpdateWorkShop/${workshop._id}`}
-                    className="absolute top-0 right-12 p-2 bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500  text-white rounded-full hover:bg-indigo-600 transition"
-                    title="Edit Workshop"
-                  >
-                    <Edit size={16} />
-                  </Link>
-                </div>
               </div>
 
               {/* Details */}
@@ -274,7 +296,7 @@ const handleDelete = async (id: string) => {
                     size={16}
                     className="text-indigo-600 mt-1 flex-shrink-0"
                   />
-                  <span>{workshop.address}</span>
+                  <span className="line-clamp-2">{workshop.address}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -327,83 +349,100 @@ const handleDelete = async (id: string) => {
                   </div>
                 </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+          </div>
         ))}
       </div>
 
-      {/* Pagination */}
-      <div className="mt-auto pt-10 flex justify-end">
-        <div className="flex flex-col items-end gap-4 bg-white rounded-xl shadow-md p-6">
-          {/* Page Info */}
-          <div className="text-sm text-gray-600">
-            Showing{" "}
-            <span className="font-semibold text-gray-800">
-              {(currentPage - 1) * limit + 1}
-            </span>{" "}
-            to{" "}
-            <span className="font-semibold text-gray-800">
-              {Math.min(currentPage * limit, meta.total)}
-            </span>{" "}
-            of <span className="font-semibold text-gray-800">{meta.total}</span>{" "}
-            workshops
+      {/* No Data Message */}
+      {result.length === 0 && (
+        <div className="text-center py-20">
+          <div className="text-gray-400 mb-4">
+            <Building2 size={64} className="mx-auto" />
           </div>
+          <h3 className="text-xl font-semibold text-gray-600 mb-2">
+            No Workshops Found
+          </h3>
+          <p className="text-gray-500">
+            There are no workshops to display at the moment.
+          </p>
+        </div>
+      )}
 
-          {/* Pagination Controls */}
-          <div className="flex items-center gap-2">
-            {/* Previous Button */}
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={`p-2 rounded-lg flex items-center gap-1 transition ${
-                currentPage === 1
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-indigo-600 text-white hover:bg-indigo-700"
-              }`}
-            >
-              <ChevronLeft size={18} />
-              <span className="hidden sm:inline text-sm">Previous</span>
-            </button>
-
-            {/* Page Numbers */}
-            <div className="flex items-center gap-1">
-              {getPageNumbers().map((page, index) => (
-                <button
-                  key={index}
-                  onClick={() =>
-                    typeof page === "number" && handlePageChange(page)
-                  }
-                  disabled={page === "..."}
-                  className={`min-w-[40px] h-10 rounded-lg text-sm font-medium transition ${
-                    page === currentPage
-                      ? "bg-indigo-600 text-white"
-                      : page === "..."
-                      ? "bg-transparent text-gray-400 cursor-default"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+      {/* Pagination */}
+      {result.length > 0 && (
+        <div className="mt-10 flex justify-end">
+          <div className="flex flex-col items-end gap-4 bg-white rounded-xl shadow-md p-6">
+            {/* Page Info */}
+            <div className="text-sm text-gray-600">
+              Showing{" "}
+              <span className="font-semibold text-gray-800">
+                {(currentPage - 1) * limit + 1}
+              </span>{" "}
+              to{" "}
+              <span className="font-semibold text-gray-800">
+                {Math.min(currentPage * limit, meta.total)}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-gray-800">{meta.total}</span>{" "}
+              workshops
             </div>
 
-            {/* Next Button */}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === meta.totalPage}
-              className={`p-2 rounded-lg flex items-center gap-1 transition ${
-                currentPage === meta.totalPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-indigo-600 text-white hover:bg-indigo-700"
-              }`}
-            >
-              <span className="hidden sm:inline text-sm">Next</span>
-              <ChevronRight size={18} />
-            </button>
+            {/* Pagination Controls */}
+            <div className="flex items-center gap-2">
+              {/* Previous Button */}
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`p-2 rounded-lg flex items-center gap-1 transition ${
+                  currentPage === 1
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-indigo-600 text-white hover:bg-indigo-700"
+                }`}
+              >
+                <ChevronLeft size={18} />
+                <span className="hidden sm:inline text-sm">Previous</span>
+              </button>
+
+              {/* Page Numbers */}
+              <div className="flex items-center gap-1">
+                {getPageNumbers().map((page, index) => (
+                  <button
+                    key={index}
+                    onClick={() =>
+                      typeof page === "number" && handlePageChange(page)
+                    }
+                    disabled={page === "..."}
+                    className={`min-w-[40px] h-10 rounded-lg text-sm font-medium transition ${
+                      page === currentPage
+                        ? "bg-indigo-600 text-white"
+                        : page === "..."
+                        ? "bg-transparent text-gray-400 cursor-default"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === meta.totalPage}
+                className={`p-2 rounded-lg flex items-center gap-1 transition ${
+                  currentPage === meta.totalPage
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-indigo-600 text-white hover:bg-indigo-700"
+                }`}
+              >
+                <span className="hidden sm:inline text-sm">Next</span>
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      {/* ---------- */}
+      )}
     </div>
   );
 };

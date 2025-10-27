@@ -19,7 +19,7 @@ const UpdateImage: React.FC = () => {
   const navigate = useNavigate();
 
   const { data, isLoading: isFetching } = useGetSingleImageQuery(id);
-  
+
   const [updateImage, { isLoading, isSuccess, isError }] = useUpdateImageMutation();
 
   const {
@@ -29,14 +29,12 @@ const UpdateImage: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  console.log(data?.data);
-
   // Prefill form with fetched data
   useEffect(() => {
     if (data?.data) {
-      setValue("title", data.data.title);
-      setValue("description", data.data.description);
-      setValue("type", data.data.type);
+      setValue("title", data.data.title || "");
+      setValue("description", data.data.description || "");
+      setValue("type", data.data.type || "");
     }
   }, [data, setValue]);
 
@@ -56,9 +54,11 @@ const UpdateImage: React.FC = () => {
         updatedData.append("image", formData.image[0]);
       }
 
-      await updateImage({ id, formData: updatedData }).unwrap();
+      // FIX: Changed 'body' to 'payload' to match your RTK Query mutation
+      await updateImage({ id, payload: updatedData }).unwrap();
+
       toast.success("Image updated successfully!");
-      navigate("/admin/carmodel"); // redirect to image list
+      navigate("/admin/carmodel");
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to update image");
     }
