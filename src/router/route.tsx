@@ -18,7 +18,6 @@ import Profile from "../Page/Profile";
 import CreateCarImage from "../Page/IMAGE/CreateCarImage";
 import UpdateImage from "../Page/IMAGE/updateImage";
 import WorkList from "../Page/WORK/workList";
-import CreateWorkForm from "../Page/WORK/work";
 import CreateSpare from "../Page/SPARE/SpareCreate";
 import ProtectedRoute from "../Page/ProtectedRoute";
 import ErrorPage from "../Page/ErrorPage";
@@ -27,6 +26,7 @@ import AboutUs from "../Page/Setting/AboutUs";
 import Support from "../Page/Setting/Support";
 import Service from "../Page/Setting/Service";
 import AccountDelete from "../Page/Setting/AccountDelete";
+import WorkFromOrFileUpload from "../Page/WORK/workHome";
 
 
 
@@ -49,7 +49,8 @@ const Routes = createBrowserRouter([
           { path: "admin/details/:id", element: <CarBrandDetail /> },
           { path: "admin/workShop", element: <WorkShop /> },
           { path: "admin/workList", element: <WorkList /> },
-          { path: "admin/addWork", element: <CreateWorkForm /> },
+          // { path: "admin/addWork", element: <CreateWorkForm /> },
+          { path: "admin/addWork", element: <WorkFromOrFileUpload /> },
           { path: "admin/Spare", element: <CreateSpare /> },
           { path: "admin/car", element: <Cars /> },
           // { path: "admin/setting", element: <Settings /> },

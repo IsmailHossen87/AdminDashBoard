@@ -12,6 +12,14 @@ createWork: builder.mutation({
       }),
       invalidatesTags: ["WORK"],
     }),
+createWorkByFile: builder.mutation({
+      query: (body) => ({
+        url: "/works/xlxs",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["WORK"],
+    }),
 createSpare: builder.mutation({
       query: (body) => ({
         url: "/spare-parts",
@@ -35,4 +43,4 @@ createSpare: builder.mutation({
   overrideExisting: false, 
 });
 
-export const {useCreateWorkMutation,useCreateSpareMutation ,useWorkListQuery} = workApi;
+export const {useCreateWorkMutation,useCreateWorkByFileMutation,useCreateSpareMutation ,useWorkListQuery} = workApi;
