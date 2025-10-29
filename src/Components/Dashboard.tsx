@@ -1,13 +1,32 @@
-import { Loader2, Users, Calendar, DollarSign, Bookmark, Mail, Phone, User } from "lucide-react";
-import { useGetDashBoardQuery } from "../redux/feature/adminApi";
-import {  useGetAllAdminQuery } from "../redux/feature/authApi";
-
-
+import {
+  Loader2,
+  Users,
+  Calendar,
+  DollarSign,
+  Bookmark,
+  Mail,
+  Phone,
+  User,
+} from "lucide-react";
+import { useAllWorkShopQuery, useGetDashBoardQuery } from "../redux/feature/adminApi";
+import { useGetAllAdminQuery } from "../redux/feature/authApi";
+import { useState } from "react";
 
 const Dashboard = () => {
-  const { data: DashBoard, isLoading, isError } = useGetDashBoardQuery(undefined);
-  const { data: PersonalData } = useGetAllAdminQuery(undefined);
+  const {
+    data: DashBoard,
+    isLoading,
+    isError,
+  } = useGetDashBoardQuery(undefined);
+  const { data: PersonalData } = useGetAllAdminQuery(undefined); 
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+ 
+
+  // ✅ Single API for all & search
+  const { data: allData} = useAllWorkShopQuery({ search: searchTerm });
+  console.log(allData?.data?.meta?.total);
 
   if (isLoading) {
     return (
@@ -26,8 +45,7 @@ const Dashboard = () => {
     );
   }
 
-  const { totalAdmins, period, subscriptions } = DashBoard.data; 
-
+  const { totalAdmins, period, subscriptions } = DashBoard.data;
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -40,7 +58,7 @@ const Dashboard = () => {
       </div>
 
       {/* === Dashboard Summary Cards === */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
         {/* Total Admins */}
         <div className="bg-[#1771B7] rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
           <div className="p-3 bg-[#0F5C79] rounded-full text-white">
@@ -53,8 +71,8 @@ const Dashboard = () => {
         </div>
 
         {/* Subscriptions Count */}
-        <div className="bg-pink-500 rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
-          <div className="p-3 bg-pink-700 rounded-full text-white">
+        <div className="bg-amber-800 rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
+          <div className="p-3 bg-amber-900 rounded-full text-white">
             <Bookmark size={28} />
           </div>
           <div>
@@ -92,7 +110,7 @@ const Dashboard = () => {
         </div>
 
         {/* Period Info */}
-        <div className="bg-[#4C74B5] rounded-2xl shadow-lg p-6 col-span-2 hover:shadow-xl transition">
+        {/* <div className="bg-[#4C74B5] rounded-2xl shadow-lg p-6 col-span-2 hover:shadow-xl transition">
           <h3 className="text-lg font-semibold text-white mb-2">
             Current Period
           </h3>
@@ -114,61 +132,63 @@ const Dashboard = () => {
               </span>
             </p>
           </div>
+        </div> */}
+        {/* Period Info */}
+        <div className="bg-[#1771B7] rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
+          <div className="p-3 bg-[#0F5C79] rounded-full text-white">
+            <Users size={28} />
+          </div>
+          <div>
+            <p className="text-white text-sm">Total WorkShop</p>
+            <h2 className="text-2xl font-bold text-white">{allData?.data?.meta?.total}</h2>
+          </div>
         </div>
+       
       </div>
 
       {/* === Admin Info Section === */}
       <div className="min-h-screen py-10 px-6">
-  <h2 className="text-3xl font-bold text-gray-800 mb-8 ">
-    All Admins
-  </h2>
+        <h2 className="text-3xl font-bold text-gray-800 mb-8">All Admins</h2>
 
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {PersonalData?.data?.map((admin: any, index: number) => (
-      <div
-        key={admin._id || index}
-        className="bg-linear-to-tr from-blue-500 via-purple-600 to-pink-500 p-[#1px] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300"
-      >
-        <div className="bg-white rounded-2xl p-6 flex flex-col gap-4 hover:scale-[1.02] transition-all duration-300">
-          {/* Header */}
-          <div className="flex items-center gap-4 border-b border-gray-100 pb-3">
-            <div className="p-3 bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 text-white rounded-full shadow-md">
-              <User size={26} />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">
-                {admin.name}
-              </h3>
-              <p className="text-sm text-gray-500">
-                ID: {admin._id.slice(0, 8)}...
-              </p>
-            </div>
-          </div>
-
-          {/* Contact Info */}
-          <div className="text-gray-700 text-sm space-y-2">
-            <p className="flex items-center gap-2">
-              <Mail size={16} className="text-indigo-600" />
-              <span className="truncate">{admin.email}</span>
-            </p>
-            <p className="flex items-center gap-2">
-              <Phone size={16} className="text-green-600" />
-              <span>{admin.contact}</span>
-            </p>
-          </div>
-
-          {/* Footer Tag */}
-          <div className="mt-3">
-            <span className="inline-block text-xs font-semibold bg-linear-to-r from-blue-500 to-pink-500 text-white px-3 py-1 rounded-full shadow-md">
-              Admin
-            </span>
-          </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+            <thead className="bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 text-white">
+              <tr>
+                <th className="py-3 px-6 text-left">Sirial</th>
+                <th className="py-3 px-6 text-left">Name</th>
+                <th className="py-3 px-6 text-left">Email</th>
+                <th className="py-3 px-6 text-left">Contact</th>
+                <th className="py-3 px-6 text-left">ID</th>
+                <th className="py-3 px-6 text-left">Role</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-700">
+              {PersonalData?.data?.map((admin: any, index: number) => (
+                <tr
+                  key={admin._id || index}
+                  className="border-b hover:bg-gray-50 transition-all duration-200"
+                >
+                  <td className="py-3 px-6">{index + 1}</td>
+                  <td className="py-3 px-6 flex items-center gap-3">
+                    <div className="p-2 bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 text-white rounded-full shadow-md">
+                      <User size={20} />
+                    </div>
+                    <span>{admin.name}</span>
+                  </td>
+                  <td className="py-3 px-6 truncate">{admin.email}</td>
+                  <td className="py-3 px-6">{admin.contact}</td>
+                  <td className="py-3 px-6">{admin._id.slice(0, 8)}...</td>
+                  <td className="py-3 px-6">
+                    <span className="inline-block text-xs font-semibold bg-linear-to-r from-blue-500 to-pink-500 text-white px-3 py-1 rounded-full shadow-md">
+                      Admin
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
-    ))}
-  </div>
-</div>
-
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://10.10.7.77:8002/api/v1', // Your base API URL
+  baseUrl: 'https://asif7001.binarybards.online/api/v1', // Your base API URL
   prepareHeaders: (headers) => {
     // Set custom headers (e.g., ngrok-skip-browser-warning)
     headers.set("ngrok-skip-browser-warning", "true");

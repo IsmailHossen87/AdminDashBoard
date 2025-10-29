@@ -1,10 +1,8 @@
 import { baseApi } from "../baseApi";
 
-
 export const workApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-
-createWork: builder.mutation({
+    createWork: builder.mutation({
       query: (body) => ({
         url: "/works",
         method: "POST",
@@ -12,7 +10,15 @@ createWork: builder.mutation({
       }),
       invalidatesTags: ["WORK"],
     }),
-createSpare: builder.mutation({
+    createWorkByFile: builder.mutation({
+      query: (body) => ({
+        url: "/works/xlxs",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["WORK"],
+    }),
+    createSpare: builder.mutation({
       query: (body) => ({
         url: "/spare-parts",
         method: "POST",
@@ -20,19 +26,49 @@ createSpare: builder.mutation({
       }),
       invalidatesTags: ["SPARE"],
     }),
- 
-    // ✅ All Messages
+
+    // ✅ All WorkList
     workList: builder.query({
       query: () => ({
-        url: "/WORKS",
+        url: "/works",
+        method: "GET",
+      }),
+      providesTags: ["WORK"],
+    }),
+    // ✅ All SpareQuery
+    spareList: builder.query({
+      query: () => ({
+        url: "/spare-parts",
         method: "GET",
       }),
       providesTags: ["SPARE"],
     }),
-      
-    
+    // DELETE WORKS
+    deleteWork: builder.mutation({
+      query: (workId) => ({
+        url: `/works/${workId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["WORK"],
+    }),
+    // DELETE WORKS
+    deleteSpare: builder.mutation({
+      query: (workId) => ({
+        url: `/spare-parts/${workId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["SPARE"],
+    }),
   }),
-  overrideExisting: false, 
+  overrideExisting: false,
 });
 
-export const {useCreateWorkMutation,useCreateSpareMutation ,useWorkListQuery} = workApi;
+export const {
+  useCreateWorkMutation,
+  useCreateWorkByFileMutation,
+  useCreateSpareMutation,
+  useWorkListQuery,
+  useSpareListQuery,
+  useDeleteWorkMutation,
+  useDeleteSpareMutation
+} = workApi;

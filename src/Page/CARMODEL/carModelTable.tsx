@@ -24,7 +24,7 @@ const CarModelTable = () => {
   const { data, error, isLoading } = useAllCarModelQuery(undefined);
   const [deleteCarBrand] = useDeletecarModelMutation(); 
 
-
+console.log("CARMODEL",data);
   const handleDelete = async (id: string) => {
     try {
       const result = await Swal.fire({

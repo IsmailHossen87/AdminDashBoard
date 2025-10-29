@@ -3,6 +3,15 @@ import { baseApi } from "../baseApi";
 export const adminAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // // ✅ Create Car Brand
+    createCountry: builder.mutation({
+      query: (body) => ({
+        url: "/car-brand-countries",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["COUNTRY"],
+    }),
+    // // ✅ Create Car Brand
     createImage: builder.mutation({
       query: (body) => ({
         url: "/images",
@@ -51,8 +60,8 @@ export const adminAPI = baseApi.injectEndpoints({
 
     // ✅ All Workshops
     allWorkShop: builder.query({
-      query: () => ({
-        url: "/workshops",
+      query: ({ search }) => ({
+        url: `/workshops?searchTerm=${search || ""}`,
         method: "GET",
       }),
       providesTags: ["WORKSHOP"],
@@ -99,8 +108,15 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       providesTags: ["IMAGE"],
     }),
+    logoType: builder.query({
+      query: () => ({
+        url: "images/website_logo",
+        method: "GET",
+      }),
+      providesTags: ["IMAGE"],
+    }),
 
-// ---------------------------------------
+    // ---------------------------------------
     // ✅ Single Brand Fetch
     getBrandById: builder.query({
       query: (brandId: string) => ({
@@ -135,7 +151,15 @@ export const adminAPI = baseApi.injectEndpoints({
       }),
       providesTags: ["IMAGE"],
     }),
-// ----------------------------   SINGLE
+    // ----------------------------   SINGLE
+    // ✅ Delete Country
+    deleteCountry: builder.mutation({
+      query: (id: string) => ({
+        url: `/car-brand-countries/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["COUNTRY"],
+    }),
     // ✅ Delete Message
     deleteMessage: builder.mutation({
       query: (messageId: string) => ({
@@ -214,6 +238,7 @@ export const adminAPI = baseApi.injectEndpoints({
 
 export const {
   // ✅ Create
+  useCreateCountryMutation,
   useCreateCarBrandMutation,
   useCreateCarModelMutation,
   useCreateImageMutation,
@@ -233,8 +258,10 @@ export const {
   useGetSingleWorkShopQuery,
   useGetSingleCarQuery,
   useGetSingleImageQuery,
+  useLogoTypeQuery,
 
   // ✅ Delete
+  useDeleteCountryMutation,
   useDeleteMessageMutation,
   useDeleteBrandMutation,
   useDeletecarModelMutation,
@@ -244,5 +271,5 @@ export const {
 
   // ✅ Update
   useUpdateWorkShopMutation,
-  useUpdateImageMutation
+  useUpdateImageMutation,
 } = adminAPI;

@@ -16,7 +16,7 @@ import { NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sidebarSlice";
 import { VscSignIn } from "react-icons/vsc";
-import { MdBrandingWatermark, MdWorkHistory } from "react-icons/md";
+import { MdBrandingWatermark, MdWork, MdWorkHistory } from "react-icons/md";
 import type { RootState } from "../redux/store";
 
 interface MenuItem {
@@ -33,13 +33,15 @@ const AdminNavbar: React.FC = () => {
   const [openDropdown, setOpenDropdown] = useState(false);
 
   const menuItems: MenuItem[] = [
-    { name: "Profile", icon: User, path: "/admin/profile" },
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
+    { name: "Profile", icon: User, path: "/admin/profile" },
     { name: "Car", icon: Car, path: "/admin/car" },
     { name: "Brand", icon: MdBrandingWatermark, path: "/admin/brand" },
     { name: "Car Model", icon: Car, path: "/admin/carmodel" },
     { name: "Workshop", icon: MdWorkHistory, path: "/admin/workShop" },
-    { name: "Messages", icon: MessageCircle, path: "/admin/message" },
+    { name: "Work", icon: MdWork, path: "/admin/workList" },
+    { name: "Spare", icon: Sparkle, path: "/admin/Spare" },
+    { name: "User Feedback", icon: MessageCircle, path: "/admin/message" },
     {
       name: "Setting",
       icon: Settings,
@@ -51,9 +53,8 @@ const AdminNavbar: React.FC = () => {
         { name: "Account Delete", path: "/admin/account-delete" },
       ],
     },
-    { name: "Work", icon: Settings, path: "/admin/workList" },
-    { name: "Spare", icon: Sparkle, path: "/admin/Spare" },
   ];
+
 
   const checkLoginStatus = () => {
     const token = localStorage.getItem("accessToken");
@@ -62,14 +63,26 @@ const AdminNavbar: React.FC = () => {
 
   useEffect(() => {
     checkLoginStatus();
-    window.addEventListener("storage", checkLoginStatus);
-    return () => window.removeEventListener("storage", checkLoginStatus);
+
+    const handleAuthChange = () => {
+      checkLoginStatus();
+    };
+
+    window.addEventListener("authChange", handleAuthChange);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener("authChange", handleAuthChange);
+    };
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    
+    window.dispatchEvent(new Event('authChange'));
     setIsLoggedIn(false);
+     window.location.reload();
   };
 
   return (
@@ -109,7 +122,7 @@ const AdminNavbar: React.FC = () => {
                   className={`flex items-center justify-between  w-full p-3 rounded-md transition-all ${
                     openDropdown
                       ? "bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 text-white font-bold"
-                      : "hover:bg-pink-500"
+                      : "hover:bg-blue-700"
                   }`}
                 >
                   <div className="flex items-center">
@@ -157,7 +170,7 @@ const AdminNavbar: React.FC = () => {
                   `flex items-center w-full p-3 rounded-md transition-all ${
                     isActive
                       ? "bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 font-bold text-white"
-                      : "hover:bg-pink-500"
+                      : "hover:bg-blue-700"
                   }`
                 }
               >
@@ -196,7 +209,7 @@ const AdminNavbar: React.FC = () => {
         ) : (
           <Link
             to="/login"
-            className="flex items-center justify-between px-4 py-2 bg-green-700 rounded-xl"
+            className="flex items-center justify-between px-4 py-2 bg-blue-950 rounded-xl"
           >
             <p className="font-semibold">Login</p>
             <VscSignIn size={22} />

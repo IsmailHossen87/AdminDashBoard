@@ -18,8 +18,6 @@ import Profile from "../Page/Profile";
 import CreateCarImage from "../Page/IMAGE/CreateCarImage";
 import UpdateImage from "../Page/IMAGE/updateImage";
 import WorkList from "../Page/WORK/workList";
-import CreateWorkForm from "../Page/WORK/work";
-import CreateSpare from "../Page/SPARE/SpareCreate";
 import ProtectedRoute from "../Page/ProtectedRoute";
 import ErrorPage from "../Page/ErrorPage";
 import PrivacyPolicy from "../Page/Setting/PrivacyPolicy";
@@ -27,7 +25,10 @@ import AboutUs from "../Page/Setting/AboutUs";
 import Support from "../Page/Setting/Support";
 import Service from "../Page/Setting/Service";
 import AccountDelete from "../Page/Setting/AccountDelete";
-
+import WorkFromOrFileUpload from "../Page/WORK/workHome";
+import SpareFromOrFileUpload from "../Page/SPARE/SpareHome";
+import SparePartsList from "../Page/SPARE/SpareList";
+import { CreateCountry } from "../Page/CARBRAND/CreateCountry";
 
 
 const Routes = createBrowserRouter([
@@ -45,15 +46,17 @@ const Routes = createBrowserRouter([
           { path: "admin/createAdmin", element: <CreateAdmin /> },
           { path: "admin/message", element: <MessageList /> },
           { path: "admin/brand", element: <CarBrandComponent /> },
+          { path: "country", element: <CreateCountry /> },
           { path: "admin/carmodel", element: <CarModelTable /> },
           { path: "admin/details/:id", element: <CarBrandDetail /> },
+          // WORK
           { path: "admin/workShop", element: <WorkShop /> },
           { path: "admin/workList", element: <WorkList /> },
-          { path: "admin/addWork", element: <CreateWorkForm /> },
-          { path: "admin/Spare", element: <CreateSpare /> },
+          { path: "admin/addWork", element: <WorkFromOrFileUpload /> },
+          { path: "admin/Spare", element: <SparePartsList /> },
+          { path: "admin/createSpare", element: <SpareFromOrFileUpload /> },
           { path: "admin/car", element: <Cars /> },
-          // { path: "admin/setting", element: <Settings /> },
-          // SETTING
+// Setting
            { path: "admin/privacy-policy", element: <PrivacyPolicy /> },
             { path: "admin/about-us", element: <AboutUs /> },
              { path: "admin/support", element: <Support /> },

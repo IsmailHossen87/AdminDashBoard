@@ -1,25 +1,24 @@
 import { baseApi } from "../baseApi";
 
-
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createAdmin: builder.mutation({
       query: (authData) => ({
         url: "/admin/create-admin",
         method: "POST",
-        body: authData, 
+        body: authData,
       }),
-      invalidatesTags: ["ADMIN"], 
+      invalidatesTags: ["ADMIN"],
     }),
     Login: builder.mutation({
       query: (authData) => ({
         url: "/auth/login",
         method: "POST",
-        body: authData, 
+        body: authData,
       }),
-      invalidatesTags: ["AUTH"], 
+      invalidatesTags: ["AUTH"],
     }),
-    
+
     // ✅ Personal admin data
     getAllAdmin: builder.query({
       query: (params) => ({
@@ -29,6 +28,16 @@ export const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["ADMIN"],
     }),
+    // UPDATE
+    updateAdmin: builder.mutation({
+      query: ({ id, updates }) => ({
+        url: `/users/admin/update/${id}`,
+        method: "PATCH",
+        body: updates,
+      }),
+      invalidatesTags: ["AUTH"],
+    }),
+
     // ✅ Personal admin data
     getProfile: builder.query({
       query: (params) => ({
@@ -36,19 +45,25 @@ export const authApi = baseApi.injectEndpoints({
         method: "GET",
         params,
       }),
-      providesTags: ["ADMIN"],
+      providesTags: ["AUTH"],
     }),
     // DELETE ADMIN
-     deleteAdmin: builder.mutation({
+    deleteAdmin: builder.mutation({
       query: (adminId) => ({
-        url: `/admin/${adminId}`, 
+        url: `/admin/${adminId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ['ADMIN'] 
+      invalidatesTags: ["ADMIN"],
     }),
-    
   }),
-  overrideExisting: false, 
+  overrideExisting: false,
 });
 
-export const { useCreateAdminMutation,useGetAllAdminQuery,useGetProfileQuery, useLoginMutation,useDeleteAdminMutation } = authApi;
+export const {
+  useCreateAdminMutation,
+  useGetAllAdminQuery,
+  useGetProfileQuery,
+  useLoginMutation,
+  useUpdateAdminMutation,
+  useDeleteAdminMutation,
+} = authApi;

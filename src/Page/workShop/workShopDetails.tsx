@@ -38,7 +38,7 @@ const WorkShopDetails: React.FC = () => {
   const workshop = data.data;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white p-8">
+    <div className="min-h-screen bg-linear-to-b from-indigo-50 to-white p-8">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}

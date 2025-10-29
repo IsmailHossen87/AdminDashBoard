@@ -1,64 +1,155 @@
-// src/components/WorkList.tsx
 import React from "react";
-import { useWorkListQuery } from "../../redux/feature/work";
-import { Link } from "react-router";
+import {
+  useDeleteWorkMutation,
+  useWorkListQuery,
+} from "../../redux/feature/work";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { Button, Tooltip } from "antd";
+import { FiDelete } from "react-icons/fi";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
+const WorkListTable: React.FC = () => {
+  const { data, isLoading, isError, refetch } = useWorkListQuery(undefined); // refetch added
+  const [deleteWork, { isLoading: isDeleting }] = useDeleteWorkMutation();
 
-const colors = [
-  "bg-red-100", "bg-green-100", "bg-blue-100", 
-  "bg-yellow-100", "bg-pink-100", "bg-purple-100",
-  "bg-orange-100", "bg-teal-100"
-];
+  if (isLoading)
+    return <div className="text-center py-10 text-gray-600">Loading...</div>;
+  if (isError)
+    return (
+      <div className="text-center py-10 text-red-500">
+        Failed to load work list!
+      </div>
+    );
 
-const WorkList: React.FC = () => {
-  const { data, isLoading, isError } = useWorkListQuery(undefined);
+  const works = data?.data?.result || [];
 
-  if (isLoading) return <div className="text-center py-10">Loading...</div>;
-  if (isError) return <div className="text-center py-10 text-red-500">Error fetching works!</div>;
+  const handleDelete = async (id: string) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (result.isConfirmed) {
+        await deleteWork(id).unwrap(); 
+        Swal.fire({
+          title: "Deleted!",
+          text: "The Work  has been deleted.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.data?.message || "Failed to delete the work.");
+    }
+  };
 
   return (
-   <div >
-   <div className="flex flex-col sm:flex-row justify-between items-center bg-white/80 backdrop-blur-lg border border-gray-200 rounded-xl shadow-md p-5 mb-6">
-  {/* Title */}
-  <h2 className="text-2xl font-bold">
-    🧰 Work List
-  </h2>
+    <div className="p-6 bg-white rounded-xl shadow-xl border border-gray-100">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-800">🧰 Work List</h2>
 
-  {/* Create Button */}
-  <Link to="/admin/addWork" className="mt-4 sm:mt-0">
-    <button className="flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium text-white bg-linear-to-tr from-blue-500 via-purple-600 to-pink-500 shadow-lg hover:shadow-pink-400/30 hover:scale-[1.03] transition-all duration-300">
-      <MdOutlineCreateNewFolder className="text-lg" />
-      <span>Create Work</span>
-    </button>
-  </Link>
-</div>
+        <Link to="/admin/addWork" className="mt-3 sm:mt-0">
+          <button className="flex items-center gap-2 px-5 py-2 rounded-lg text-white bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 hover:scale-105 transition-all shadow-lg">
+            <MdOutlineCreateNewFolder />
+            Create Work
+          </button>
+        </Link>
+      </div>
 
-     <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {data?.data?.result.map((work: any, idx: number) => {
-        const colorClass = colors[idx % colors.length];
-        return (
-          <div key={work._id} className={`p-4 rounded-xl shadow-lg ${colorClass} transition transform hover:scale-105`}>
-            <h2 className="font-bold text-lg mb-2">{work.workCategoryName}</h2>
-            <p className="mb-1"><span className="font-semibold">Type:</span> {work.type}</p>
-            <p className="mb-1"><span className="font-semibold">Code:</span> {work.code}</p>
-            {work.cost && <p className="mb-1"><span className="font-semibold">Cost:</span> ${work.cost}</p>}
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full border border-gray-200 rounded-lg">
+          <thead className="bg-linear-to-tr from-blue-100 to-purple-100 text-gray-700">
+            <tr>
+              <th className="py-3 px-4 text-left font-semibold border-b">
+                Serial
+              </th>
+              <th className="py-3 px-4 text-left font-semibold border-b">
+                English Title
+              </th>
+              <th className="py-3 px-4 text-left font-semibold border-b">
+                Bengali Title
+              </th>
+              <th className="py-3 px-4 text-left font-semibold border-b">
+                Category
+              </th>
+              <th className="py-3 px-4 text-left font-semibold border-b">
+                Type
+              </th>
+              <th className="py-3 px-4 text-left font-semibold border-b">
+                Code
+              </th>
+              <th className="py-3 px-4 text-left font-semibold border-b">
+                Created At
+              </th>
+              <th className="py-3 px-4 text-left font-semibold border-b">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {works.map((work: any, idx: number) => (
+              <tr
+                key={work._id}
+                className={`hover:bg-gray-50 ${
+                  idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                }`}
+              >
+                <td className="py-2 px-4 border-b text-gray-700">{idx + 1}</td>
+                <td className="py-2 px-4 border-b text-gray-700">
+                  {work.title?.en || "N/A"}
+                </td>
+                <td className="py-2 px-4 border-b text-gray-700">
+                  {work.title?.bn || "N/A"}
+                </td>
+                <td className="py-2 px-4 border-b text-gray-700">
+                  {work.workCategoryName}
+                </td>
+                <td className="py-2 px-4 border-b text-gray-700">
+                  {work.type}
+                </td>
+                <td className="py-2 px-4 border-b text-gray-700">
+                  {work.code}
+                </td>
+                <td className="py-2 px-4 border-b text-gray-500 text-sm">
+                  {new Date(work.createdAt).toLocaleDateString()}
+                </td>
+                <td className="py-2 px-4 border-b text-gray-500 text-sm">
+                  <Tooltip title="Delete Work">
+                    <Button
+                      danger
+                      icon={<FiDelete />}
+                      shape="circle"
+                      onClick={() => handleDelete(work._id)}
+                      className={`hover:scale-110 transition-all ${
+                        isDeleting ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                      disabled={isDeleting}
+                    />
+                  </Tooltip>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-            <div className="mt-2 space-y-1">
-              <p className="font-semibold">Titles:</p>
-              <ul className="list-disc list-inside text-sm">
-                {Object.entries(work.title).map(([lang, text]: [string, any]) => {
-                  if (lang !== "_id") return <li key={lang}><span className="capitalize">{lang}:</span> {text}</li>;
-                  return null;
-                })}
-              </ul>
-            </div>
-          </div>
-        );
-      })}
+      {works.length === 0 && (
+        <p className="text-center text-gray-500 mt-4">No work found</p>
+      )}
     </div>
-   </div>
   );
 };
 
-export default WorkList;
+export default WorkListTable;

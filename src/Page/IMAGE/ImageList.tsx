@@ -2,6 +2,7 @@ import React from "react";
 import {
   useDeleteImageTypeMutation,
   useImageTypeQuery,
+  useLogoTypeQuery,
 } from "../../redux/feature/adminApi";
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineCreateNewFolder, MdDelete, MdEdit } from "react-icons/md";
@@ -22,6 +23,7 @@ interface ImageItem {
 
 const ImageList: React.FC = () => {
   const { data, isLoading, isError } = useImageTypeQuery(undefined);
+  const { data: logoType } = useLogoTypeQuery(undefined);
   const [deleteImage] = useDeleteImageTypeMutation();
   const navigate = useNavigate();
 
@@ -36,22 +38,19 @@ const ImageList: React.FC = () => {
   if (isError) {
     return (
       <div className="flex justify-center items-center min-h-screen text-red-500 font-semibold">
-        Failed to load images 😢
+        Failed to load images
       </div>
     );
   }
 
   const images: ImageItem[] = data?.data || [];
+  const logos: ImageItem[] = logoType?.data?.result || [];
 
   // Count per type
   const typeCount: Record<"car_symbol" | "website_logo", number> = {
-    car_symbol: 0,
-    website_logo: 0,
+    car_symbol: images.length,
+    website_logo: logos.length,
   };
-
-  images.forEach((img) => {
-    if (img.type in typeCount) typeCount[img.type]++;
-  });
 
   // Delete Handler
   const handleDelete = async (id: string) => {
@@ -83,13 +82,13 @@ const ImageList: React.FC = () => {
     <div className="min-h-screen py-10 px-5">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-linear-to-r mb-5 from-indigo-500 rounded-t-3xl via-purple-500 to-pink-500 p-4 flex justify-between items-center">
+        <div className="bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 mb-5 rounded-t-3xl p-4 flex justify-between items-center">
           <h2 className="text-2xl md:text-3xl font-bold text-white tracking-wide drop-shadow-md">
             🖼️ Image Dashboard
           </h2>
 
           <Link to="/imageType">
-            <button className="px-5 py-2 flex items-center gap-2  bg-white text-indigo-600 font-semibold rounded-md hover:bg-indigo-50 transition-all shadow-md hover:shadow-lg">
+            <button className="px-5 py-2 flex items-center gap-2 bg-white text-indigo-600 font-semibold rounded-md hover:bg-indigo-50 transition-all shadow-md hover:shadow-lg">
               <MdOutlineCreateNewFolder className="text-lg" />
               Create Image
             </button>
@@ -100,31 +99,41 @@ const ImageList: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
           {/* Car Symbol Card */}
           <div
-            className="rounded-xl shadow-lg p-6 text-white flex flex-col justify-center items-center cursor-pointer"
-            style={{
-              background: "linear-gradient(135deg, #6EE7B7 0%, #3B82F6 100%)",
-            }}
+            className="rounded-xl shadow-lg p-6 text-white flex flex-col justify-center items-center cursor-pointer 
+             bg-linear-to-br from-blue-500 to-blue-900 hover:from-blue-400 hover:to-blue-700 transition-colors duration-300"
           >
-            <h3 className="text-xl font-semibold">Car Symbols</h3>
+            <h3 className="text-xl font-semibold">Car Symbol</h3>
             <p className="text-4xl font-bold mt-2">{typeCount.car_symbol}</p>
           </div>
 
-          {/* Website Logo Card */}
+          {/* Website Logo Card with thumbnails */}
           <div
-            className="rounded-xl shadow-lg p-6 text-white flex flex-col justify-center items-center cursor-pointer"
-            style={{
-              background: "linear-gradient(135deg, #FDE68A 0%, #F97316 100%)",
-            }}
+            className="rounded-xl shadow-lg p-6 text-white flex flex-col justify-center items-center cursor-pointer 
+             bg-linear-to-br from-amber-500 to-amber-900 hover:from-amber-400 hover:to-amber-700 transition-colors duration-300"
           >
-            <h3 className="text-xl font-semibold">Website Logos</h3>
-            <p className="text-4xl font-bold mt-2">{typeCount.website_logo}</p>
+            <h3 className="text-xl font-semibold mb-2">Website Logos</h3>
+
+            {/* Thumbnail previews */}
+            <div className="flex items-center justify-center gap-4">
+              <div className="">
+                {logos.slice(0, 4).map((l) => (
+                  <img
+                    key={l._id}
+                    src={`https://asif7001.binarybards.online${l.image}`}
+                    alt={l.title}
+                    className="w-10 h-10 rounded-full object-cover border border-white"
+                  />
+                ))}
+              </div>
+              <p className="text-4xl font-bold -mt-2">{typeCount.website_logo}</p>
+            </div>
           </div>
         </div>
 
         {/* Image List */}
-        <div className="mt-6">
+        <div className="p-2 rounded-2xl shadow-2xl mt-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            All Images
+            All Car Symbols
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {images.map((img: ImageItem) => (
@@ -133,10 +142,9 @@ const ImageList: React.FC = () => {
                 className="bg-white shadow rounded-lg overflow-hidden border border-gray-200 hover:scale-105 transition-transform duration-200 relative cursor-pointer"
               >
                 <img
-                  src={`http://10.10.7.77:8002${img.image}`}
+                  src={`https://asif7001.binarybards.online${img.image}`}
                   alt={img.title}
                   className="w-full h-48 object-cover"
-                  onClick={() => navigate(`/image/${img._id}`)}
                 />
                 <div className="p-4">
                   <h3 className="font-semibold text-gray-800">{img.title}</h3>

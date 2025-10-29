@@ -42,7 +42,7 @@ export const { fetchStart, fetchSuccess, fetchError, postSuccess } = apiSlice.ac
 export const fetchData = () => async (dispatch: any) => {
   dispatch(fetchStart());
   try {
-    const response = await axios.get("http://10.10.7.77:8002/api/v1");
+    const response = await axios.get("https://asif7001.binarybards.online/api/v1");
     dispatch(fetchSuccess(response.data));
   } catch (error: any) {
     dispatch(fetchError(error.message || "Failed to fetch data"));
@@ -52,7 +52,7 @@ export const fetchData = () => async (dispatch: any) => {
 // POST request for posting data
 export const postData = (newData: any) => async (dispatch: any) => {
   try {
-    const response = await axios.post("http://10.10.7.77:8002/api/v1", newData);
+    const response = await axios.post("https://asif7001.binarybards.online/api/v1", newData);
     dispatch(postSuccess(response.data));
   } catch (error: any) {
     console.error("Error posting data: ", error);

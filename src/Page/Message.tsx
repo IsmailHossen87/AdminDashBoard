@@ -14,7 +14,9 @@ const MessageList = () => {
     isError,
     refetch,
   } = useAllMessageQuery(undefined);
+  console.log(messages);
   const [deleteMessage, { isLoading: isDeleting }] = useDeleteMessageMutation();
+  console.log(messages?.data?.result);
 
   const handleDelete = async (id: string) => {
     try {
@@ -60,7 +62,7 @@ const MessageList = () => {
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-6">
       <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-        User Messages
+        User Feedback Messages
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -105,16 +107,50 @@ const MessageList = () => {
             )}
 
             {/* Attached Data */}
+            {/* Attached Data */}
             {msg.data && msg.data.length > 0 && (
-              <div className="bg-gray-50 rounded-lg p-3 mt-2">
-                <p className="text-sm text-gray-600 font-medium mb-1">
+              <div className="bg-gray-50 rounded-lg p-4 mt-3">
+                <p className="text-sm text-gray-700 font-semibold mb-2">
                   Attached Data:
                 </p>
-                <ul className="list-disc list-inside text-sm text-gray-500">
-                  {msg.data.map((item: any, i: number) => (
-                    <li key={i}>{JSON.stringify(item)}</li>
-                  ))}
-                </ul>
+
+                <div className="overflow-x-auto">
+                  <table className="min-w-full border border-gray-200 rounded-lg text-sm">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="px-4 py-2 text-left font-medium text-gray-600 border-b">
+                          Requested Work Item
+                        </th>
+                        <th className="px-4 py-2 text-left font-medium text-gray-600 border-b">
+                          Work Category Name
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {msg.data.map(
+                        (
+                          item: {
+                            requestedWorkItem: string;
+                            workCategoryName: string;
+                          },
+                          i: number
+                        ) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-gray-100 transition-colors border-b"
+                          >
+                            <td className="px-4 py-2 text-gray-700">
+                              {item.requestedWorkItem}
+                            </td>
+                            <td className="px-4 py-2 text-gray-700">
+                              {item.workCategoryName}
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </motion.div>
