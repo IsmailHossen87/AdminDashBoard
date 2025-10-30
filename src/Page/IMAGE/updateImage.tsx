@@ -15,7 +15,7 @@ interface FormData {
 }
 
 const UpdateImage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const { data, isLoading: isFetching } = useGetSingleImageQuery(id);
@@ -54,8 +54,10 @@ const UpdateImage: React.FC = () => {
         updatedData.append("image", formData.image[0]);
       }
 
-      // FIX: Changed 'body' to 'payload' to match your RTK Query mutation
-      await updateImage({ id, payload: updatedData }).unwrap();
+  
+   await updateImage({ id: id as string, payload: updatedData }).unwrap();
+
+
 
       toast.success("Image updated successfully!");
       navigate("/admin/carmodel");

@@ -4,8 +4,6 @@ import {
   Calendar,
   DollarSign,
   Bookmark,
-  Mail,
-  Phone,
   User,
 } from "lucide-react";
 import {
@@ -23,7 +21,7 @@ const Dashboard = () => {
   } = useGetDashBoardQuery(undefined);
   const { data: PersonalData } = useGetAllAdminQuery(undefined);
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
 
   // ✅ Single API for all & search
   const { data: allData } = useAllWorkShopQuery({ search: searchTerm });
@@ -46,7 +44,7 @@ const Dashboard = () => {
     );
   }
 
-  const { totalAdmins, period, subscriptions } = DashBoard.data;
+  const { totalAdmins, subscriptions } = DashBoard.data;
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

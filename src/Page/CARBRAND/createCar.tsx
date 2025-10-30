@@ -22,7 +22,7 @@ const CreateCarBrand: React.FC = () => {
     useCreateCarBrandMutation();
   const navigate = useNavigate();
 
-  const { data: countryData, isLoading: isCountryLoading } =
+  const { data: countryData } =
     useAllCountryQuery(undefined);
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 

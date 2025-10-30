@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
   Loader2,
   Building2,
@@ -10,7 +10,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import {
   useAllWorkShopQuery,

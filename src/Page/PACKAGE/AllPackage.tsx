@@ -7,7 +7,7 @@ import {
 } from "../../redux/feature/Package";
 import { Link, useNavigate } from "react-router";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
-import { calcLength } from "framer-motion";
+
 
 const PackageTable = () => {
   const { data, isLoading, isError } = useGetAllPackageQuery(undefined);
