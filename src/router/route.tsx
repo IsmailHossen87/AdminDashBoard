@@ -32,20 +32,24 @@ import { CreateCountry } from "../Page/CARBRAND/CreateCountry";
 import PackageTable from "../Page/PACKAGE/AllPackage";
 import CreatePackageForm from "../Page/PACKAGE/CreatePackage";
 import AllSubscription from "../Page/PACKAGE/AllSubscription";
-
+import UpdatePackageForm from "../Page/PACKAGE/UpdatePackage";
 
 const Routes = createBrowserRouter([
   {
+    path: "/login",
+    element: <Login />,
+  },
+  {
     path: "/",
-    element: <AdminLayout />,
-      errorElement: <ErrorPage />,
+    element: <ProtectedRoute />, 
+    errorElement: <ErrorPage />,
     children: [
       {
-        element: <ProtectedRoute />,
+        element: <AdminLayout />,
         children: [
-          { index: true, element: <Profile /> },
-          { path: "admin/profile", element: <Profile /> },
+          { index: true, element: <Dashboard /> }, 
           { path: "admin/dashboard", element: <Dashboard /> },
+          { path: "admin/profile", element: <Profile /> },
           { path: "admin/createAdmin", element: <CreateAdmin /> },
           { path: "admin/message", element: <MessageList /> },
           { path: "admin/brand", element: <CarBrandComponent /> },
@@ -61,12 +65,12 @@ const Routes = createBrowserRouter([
           { path: "admin/Spare", element: <SparePartsList /> },
           { path: "admin/createSpare", element: <SpareFromOrFileUpload /> },
           { path: "admin/car", element: <Cars /> },
-// Setting
-           { path: "admin/privacy-policy", element: <PrivacyPolicy /> },
-            { path: "admin/about-us", element: <AboutUs /> },
-             { path: "admin/support", element: <Support /> },
-              { path: "admin/service", element: <Service /> },
-               { path: "admin/account-delete", element: <AccountDelete /> },
+          // Setting
+          { path: "admin/privacy-policy", element: <PrivacyPolicy /> },
+          { path: "admin/about-us", element: <AboutUs /> },
+          { path: "admin/support", element: <Support /> },
+          { path: "admin/service", element: <Service /> },
+          { path: "admin/account-delete", element: <AccountDelete /> },
           { path: "create", element: <CreateCarBrand /> },
           { path: "package", element: <CreatePackageForm /> },
           { path: "model", element: <CreateCarModel /> },
@@ -74,14 +78,12 @@ const Routes = createBrowserRouter([
           { path: "image/edit/:id", element: <UpdateImage /> },
           { path: "UpdateWorkShop/:workshopId", element: <UpdateWorkShop /> },
           { path: "workShopDetails/:workShopId", element: <WorkShopDetails /> },
+          { path: "updatePackage/:id", element: <UpdatePackageForm /> },
           { path: "carDetails/:carId", element: <CarDetails /> },
         ],
       },
-      // Public route
-      { path: "login", element: <Login /> }, 
     ],
   },
 ]);
-
 
 export default Routes;

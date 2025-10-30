@@ -8,7 +8,10 @@ import {
   Phone,
   User,
 } from "lucide-react";
-import { useAllWorkShopQuery, useGetDashBoardQuery } from "../redux/feature/adminApi";
+import {
+  useAllWorkShopQuery,
+  useGetDashBoardQuery,
+} from "../redux/feature/adminApi";
 import { useGetAllAdminQuery } from "../redux/feature/authApi";
 import { useState } from "react";
 
@@ -18,14 +21,12 @@ const Dashboard = () => {
     isLoading,
     isError,
   } = useGetDashBoardQuery(undefined);
-  const { data: PersonalData } = useGetAllAdminQuery(undefined); 
+  const { data: PersonalData } = useGetAllAdminQuery(undefined);
 
   const [searchTerm, setSearchTerm] = useState("");
 
- 
-
   // ✅ Single API for all & search
-  const { data: allData} = useAllWorkShopQuery({ search: searchTerm });
+  const { data: allData } = useAllWorkShopQuery({ search: searchTerm });
   console.log(allData?.data?.meta?.total);
 
   if (isLoading) {
@@ -96,19 +97,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Amount Earned */}
-        <div className="bg-[#F46236] rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
-          <div className="p-3 bg-[#D75727] rounded-full text-white">
-            <DollarSign size={28} />
-          </div>
-          <div>
-            <p className="text-white text-sm">Amount Earned</p>
-            <h2 className="text-2xl font-bold text-white">
-              ${subscriptions?.amountEarned}
-            </h2>
-          </div>
-        </div>
-
         {/* Period Info */}
         {/* <div className="bg-[#4C74B5] rounded-2xl shadow-lg p-6 col-span-2 hover:shadow-xl transition">
           <h3 className="text-lg font-semibold text-white mb-2">
@@ -140,10 +128,23 @@ const Dashboard = () => {
           </div>
           <div>
             <p className="text-white text-sm">Total WorkShop</p>
-            <h2 className="text-2xl font-bold text-white">{allData?.data?.meta?.total}</h2>
+            <h2 className="text-2xl font-bold text-white">
+              {allData?.data?.meta?.total}
+            </h2>
           </div>
         </div>
-       
+        {/* Amount Earned */}
+        <div className="bg-[#F46236] rounded-2xl shadow-lg p-6 flex items-center gap-4 hover:shadow-xl transition">
+          <div className="p-3 bg-[#D75727] rounded-full text-white">
+            <DollarSign size={28} />
+          </div>
+          <div>
+            <p className="text-white text-sm">Amount Earned</p>
+            <h2 className="text-2xl font-bold text-white">
+              ${subscriptions?.amountEarned}
+            </h2>
+          </div>
+        </div>
       </div>
 
       {/* === Admin Info Section === */}

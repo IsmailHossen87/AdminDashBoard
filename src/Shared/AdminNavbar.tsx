@@ -222,8 +222,7 @@ const AdminNavbar: React.FC = () => {
 
       {/* Footer */}
       <div className="p-4 border-t border-blue-400">
-        {isLoggedIn ? (
-          <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between">
             {!isCollapsed && (
               <div className="flex items-center space-x-3">
                 <img
@@ -244,6 +243,8 @@ const AdminNavbar: React.FC = () => {
               <LogOut size={20} />
             </button>
           </div>
+        {/* {isLoggedIn ? (
+          
         ) : (
           <Link
             to="/login"
@@ -252,7 +253,7 @@ const AdminNavbar: React.FC = () => {
             <p className="font-semibold">Login</p>
             <VscSignIn size={22} />
           </Link>
-        )}
+        )} */}
       </div>
     </div>
   );

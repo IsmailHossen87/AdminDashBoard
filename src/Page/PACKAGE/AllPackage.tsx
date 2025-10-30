@@ -5,12 +5,14 @@ import {
   useDeletePackageMutation,
   useGetAllPackageQuery,
 } from "../../redux/feature/Package";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
+import { calcLength } from "framer-motion";
 
 const PackageTable = () => {
   const { data, isLoading, isError } = useGetAllPackageQuery(undefined);
   const [deletePackage] = useDeletePackageMutation();
+  const navigate = useNavigate();
 
   if (isLoading)
     return (
@@ -27,10 +29,7 @@ const PackageTable = () => {
     );
 
   const packages = data?.data?.packages || [];
-
-// const a = packages?.map((da:any) => console.log(da))
-console.log(packages);
-
+  console.log(packages);
 
   const handleDelete = async (id: string) => {
     const result = await Swal.fire({
@@ -48,9 +47,8 @@ console.log(packages);
     }
   };
 
-  const handleEdit = (pkg: any) => {
-    // ✨ এখানে edit modal বা navigate logic দিতে পারো
-    toast.info(`Editing package: ${pkg.title}`);
+  const handleEdit = (id: string) => {
+    navigate(`/updatePackage/${id}`);
   };
 
   return (
@@ -78,6 +76,7 @@ console.log(packages);
               <th className="px-4 py-2 text-left">Duration</th>
               <th className="px-4 py-2 text-left">Payment Type</th>
               <th className="px-4 py-2 text-left">Discount</th>
+              <th className="px-4 py-2 text-left">Subscription Type</th>
               <th className="px-4 py-2 text-left">Status</th>
               <th className="px-4 py-2 text-center">Actions</th>
             </tr>
@@ -87,11 +86,23 @@ console.log(packages);
               <tr key={pkg._id} className="hover:bg-gray-50">
                 <td className="px-4 py-2">{index + 1}</td>
                 <td className="px-4 py-2 font-medium">{pkg.title}</td>
-                <td className="px-4 py-2">{pkg.description}</td>
+                <td
+                  className="px-4 py-2 hover:bg-gray-300 max-w-xs truncate relative group cursor-pointer"
+                  title={pkg.description} 
+                >
+                  {pkg.description.split(" ").slice(0, 5).join(" ")}
+                  {pkg.description.split(" ").length > 7 && "....."}
+                </td>
+
                 <td className="px-4 py-2">${pkg.price}</td>
                 <td className="px-4 py-2">{pkg.duration || "N/A"}</td>
                 <td className="px-4 py-2">{pkg.paymentType}</td>
-                <td className="px-4 py-2">{pkg.discountPercentage || 0}%</td>
+                <td className="px-4 py-2 text-center">
+                  {pkg.discountPercentage || 0}%
+                </td>
+                <td className="px-4 py-2 text-center">
+                  {pkg.subscriptionType || "N/A"}
+                </td>
                 <td
                   className={`px-4 py-2 font-semibold ${
                     pkg.status === "active" ? "text-green-600" : "text-red-600"
@@ -101,7 +112,7 @@ console.log(packages);
                 </td>
                 <td className="px-4 py-2 text-center flex justify-center gap-3">
                   <button
-                    onClick={() => handleEdit(pkg)}
+                    onClick={() => handleEdit(pkg._id)}
                     className="text-blue-600 hover:text-blue-800"
                   >
                     <Edit size={18} />

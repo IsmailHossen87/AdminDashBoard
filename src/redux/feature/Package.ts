@@ -10,7 +10,7 @@ export const settingApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["PACKAGE"],
     }),
-// get All Package
+//---------------- get All Package--------------
     getAllPackage: builder.query({
       query: () => ({
         url: "/packages",
@@ -26,16 +26,36 @@ export const settingApi = baseApi.injectEndpoints({
       }),
       providesTags: ["SUBSCRIPTION"],
     }),
-    
+    // single------------------
+        getSinglePackage: builder.query({
+      query: (carId: string) => ({
+        url: `/packages/${carId}`,
+        method: "GET",
+      }),
+      providesTags: ["PACKAGE"],
+    }),
+
+
+    // -=================UPDATE===================
     updateSubscription: builder.mutation({
       query: ({ id, data }) => ({
-        url: `subscription/update/${id}`,
+        url: `/subscription/update/${id}`,
         method: "PATCH",
         body: data,
       }),
       invalidatesTags: ["SUBSCRIPTION"],
     }),
-    // Delete
+    updatePackage: builder.mutation({
+      query: ({ id, data }) => ({ 
+        url: `/packages/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["PACKAGE"],
+    }),
+
+
+    //============================== Delete
     deletePackage: builder.mutation({
       query: (id: string) => ({
         url: `/packages/${id}`,
@@ -60,6 +80,8 @@ export const {
   useDeletePackageMutation,
   useGetAllSubscriptionQuery,
   useGetAllPackageQuery,
-  useUpdateSubscriptionMutation,
+  useGetSinglePackageQuery,
   useDeleteSubscriptionMutation,
+  useUpdateSubscriptionMutation,
+  useUpdatePackageMutation,
 } = settingApi;
