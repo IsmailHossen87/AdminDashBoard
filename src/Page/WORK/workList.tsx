@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 
 const WorkListTable: React.FC = () => {
-  const { data, isLoading, isError, refetch } = useWorkListQuery(undefined); // refetch added
+  const { data, isLoading, isError, refetch } = useWorkListQuery(undefined);
   const [deleteWork, { isLoading: isDeleting }] = useDeleteWorkMutation();
 
   if (isLoading)
@@ -38,14 +38,15 @@ const WorkListTable: React.FC = () => {
       });
 
       if (result.isConfirmed) {
-        await deleteWork(id).unwrap(); 
+        await deleteWork(id).unwrap();
         Swal.fire({
           title: "Deleted!",
-          text: "The Work  has been deleted.",
+          text: "The work has been deleted.",
           icon: "success",
           timer: 1500,
           showConfirmButton: false,
         });
+        refetch();
       }
     } catch (error: any) {
       console.error(error);
@@ -54,100 +55,98 @@ const WorkListTable: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-xl shadow-xl border border-gray-100">
+    <div className="p-6 min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">🧰 Work List</h2>
+      <div className="flex flex-col sm:flex-row justify-between items-center bg-white/90 backdrop-blur-lg border border-gray-200 rounded-xl shadow-md p-5 mb-6">
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          🧰 Work List
+        </h2>
 
         <Link to="/admin/addWork" className="mt-3 sm:mt-0">
-          <button className="flex items-center gap-2 px-5 py-2 rounded-lg text-white bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 hover:scale-105 transition-all shadow-lg">
-            <MdOutlineCreateNewFolder />
+          <button className="flex items-center gap-2 px-5 py-2 rounded-lg text-white bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:opacity-90 transition-all shadow-md hover:scale-105">
+            <MdOutlineCreateNewFolder size={20} />
             Create Work
           </button>
         </Link>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-200 rounded-lg">
-          <thead className="bg-linear-to-tr from-blue-100 to-purple-100 text-gray-700">
+      <div className="overflow-x-auto bg-white rounded-lg shadow-md border border-gray-200">
+        <table className="min-w-full table-auto text-sm text-gray-700">
+          <thead className="bg-gray-100 text-gray-800 uppercase text-sm font-semibold">
             <tr>
-              <th className="py-3 px-4 text-left font-semibold border-b">
-                Serial
-              </th>
-              <th className="py-3 px-4 text-left font-semibold border-b">
+              <th className="py-3 px-4 text-left border w-16">S/N</th>
+              <th className="py-3 px-4 text-left border min-w-[180px]">
                 English Title
               </th>
-              <th className="py-3 px-4 text-left font-semibold border-b">
+              <th className="py-3 px-4 text-left border min-w-[180px]">
                 Bengali Title
               </th>
-              <th className="py-3 px-4 text-left font-semibold border-b">
+              <th className="py-3 px-4 text-left border w-[140px]">
                 Category
               </th>
-              <th className="py-3 px-4 text-left font-semibold border-b">
-                Type
-              </th>
-              <th className="py-3 px-4 text-left font-semibold border-b">
-                Code
-              </th>
-              <th className="py-3 px-4 text-left font-semibold border-b">
+              <th className="py-3 px-4 text-left border w-[100px]">Type</th>
+              <th className="py-3 px-4 text-left border w-[120px]">Code</th>
+              <th className="py-3 px-4 text-left border w-[140px]">
                 Created At
               </th>
-              <th className="py-3 px-4 text-left font-semibold border-b">
-                Action
-              </th>
+              <th className="py-3 px-4 text-center border w-[100px]">Action</th>
             </tr>
           </thead>
+
           <tbody>
-            {works.map((work: any, idx: number) => (
-              <tr
-                key={work._id}
-                className={`hover:bg-gray-50 ${
-                  idx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                }`}
-              >
-                <td className="py-2 px-4 border-b text-gray-700">{idx + 1}</td>
-                <td className="py-2 px-4 border-b text-gray-700">
-                  {work.title?.en || "N/A"}
-                </td>
-                <td className="py-2 px-4 border-b text-gray-700">
-                  {work.title?.bn || "N/A"}
-                </td>
-                <td className="py-2 px-4 border-b text-gray-700">
-                  {work.workCategoryName}
-                </td>
-                <td className="py-2 px-4 border-b text-gray-700">
-                  {work.type}
-                </td>
-                <td className="py-2 px-4 border-b text-gray-700">
-                  {work.code}
-                </td>
-                <td className="py-2 px-4 border-b text-gray-500 text-sm">
-                  {new Date(work.createdAt).toLocaleDateString()}
-                </td>
-                <td className="py-2 px-4 border-b text-gray-500 text-sm">
-                  <Tooltip title="Delete Work">
-                    <Button
-                      danger
-                      icon={<FiDelete />}
-                      shape="circle"
-                      onClick={() => handleDelete(work._id)}
-                      className={`hover:scale-110 transition-all ${
-                        isDeleting ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
-                      disabled={isDeleting}
-                    />
-                  </Tooltip>
+            {works.length > 0 ? (
+              works.map((work: any, idx: number) => (
+                <tr
+                  key={work._id}
+                  className={`transition-colors duration-150 ${
+                    idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  } hover:bg-blue-50`}
+                >
+                  <td className="py-3 px-4 border text-gray-700 text-center font-medium">
+                    {idx + 1}
+                  </td>
+                  <td className="py-3 px-4 border">{work.title?.en || "N/A"}</td>
+                  <td className="py-3 px-4 border">{work.title?.bn || "N/A"}</td>
+                  <td className="py-3 px-4 border">
+                    {work.workCategoryName || "N/A"}
+                  </td>
+                  <td className="py-3 px-4 border capitalize">
+                    {work.type || "N/A"}
+                  </td>
+                  <td className="py-3 px-4 border">{work.code || "N/A"}</td>
+                  <td className="py-3 px-4 border text-gray-500 text-sm">
+                    {new Date(work.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="py-3 px-4 border text-center">
+                    <Tooltip title="Delete Work">
+                      <Button
+                        danger
+                        icon={<FiDelete />}
+                        shape="circle"
+                        onClick={() => handleDelete(work._id)}
+                        className={`transition-all hover:scale-110 ${
+                          isDeleting ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                        disabled={isDeleting}
+                      />
+                    </Tooltip>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={8}
+                  className="text-center py-6 text-gray-500 italic"
+                >
+                  No work found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
-
-      {works.length === 0 && (
-        <p className="text-center text-gray-500 mt-4">No work found</p>
-      )}
     </div>
   );
 };

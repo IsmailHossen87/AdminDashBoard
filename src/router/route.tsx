@@ -29,6 +29,9 @@ import WorkFromOrFileUpload from "../Page/WORK/workHome";
 import SpareFromOrFileUpload from "../Page/SPARE/SpareHome";
 import SparePartsList from "../Page/SPARE/SpareList";
 import { CreateCountry } from "../Page/CARBRAND/CreateCountry";
+import PackageTable from "../Page/PACKAGE/AllPackage";
+import CreatePackageForm from "../Page/PACKAGE/CreatePackage";
+import AllSubscription from "../Page/PACKAGE/AllSubscription";
 
 
 const Routes = createBrowserRouter([
@@ -46,9 +49,11 @@ const Routes = createBrowserRouter([
           { path: "admin/createAdmin", element: <CreateAdmin /> },
           { path: "admin/message", element: <MessageList /> },
           { path: "admin/brand", element: <CarBrandComponent /> },
-          { path: "country", element: <CreateCountry /> },
+          { path: "acountry", element: <CreateCountry /> },
           { path: "admin/carmodel", element: <CarModelTable /> },
           { path: "admin/details/:id", element: <CarBrandDetail /> },
+          { path: "admin/package", element: <PackageTable /> },
+          { path: "admin/Subscription", element: <AllSubscription /> },
           // WORK
           { path: "admin/workShop", element: <WorkShop /> },
           { path: "admin/workList", element: <WorkList /> },
@@ -63,6 +68,7 @@ const Routes = createBrowserRouter([
               { path: "admin/service", element: <Service /> },
                { path: "admin/account-delete", element: <AccountDelete /> },
           { path: "create", element: <CreateCarBrand /> },
+          { path: "package", element: <CreatePackageForm /> },
           { path: "model", element: <CreateCarModel /> },
           { path: "imageType", element: <CreateCarImage /> },
           { path: "image/edit/:id", element: <UpdateImage /> },
@@ -72,7 +78,7 @@ const Routes = createBrowserRouter([
         ],
       },
       // Public route
-      { path: "login", element: <Login /> },
+      { path: "login", element: <Login /> }, 
     ],
   },
 ]);

@@ -9,13 +9,11 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
 type MaybeObjWithTitle = { title?: string } | string | undefined | null;
-type MaybeImage = string | { url?: string } | undefined | null;
+
 
 const toTitle = (v: MaybeObjWithTitle, fallback = "-") =>
   v && typeof v === "object" ? v.title || fallback : v || fallback;
 
-const toImageUrl = (v: MaybeImage, fallback = "/image/default-car.png") =>
-  !v ? fallback : typeof v === "string" ? v : v.url || fallback;
 
 const Cars: React.FC = () => {
   const { data, isLoading, isError } = useAllCarQuery(undefined);
@@ -61,7 +59,8 @@ const Cars: React.FC = () => {
     );
   }
 
-  const cars = data?.data?.result || data?.result || []; 
+  const cars = data?.data?.result || data?.result || [];  
+
 
   console.log("Hellow Car");
 
@@ -73,7 +72,7 @@ const Cars: React.FC = () => {
         <table className="min-w-full  shadow rounded-lg">
           <thead className="bg-linear-to-r from-blue-500  via-purple-500 to-pink-500 text-white">
             <tr className=" text-left">
-              <th className="px-4 py-2 text-left">Sirial</th>
+              <th className="px-4 py-2 text-left">S/N</th>
               <th className="px-4 py-2 text-left">Brand</th>
               <th className="px-4 py-2 text-left">Model</th>
               <th className="px-4 py-2 text-left">Year</th>
@@ -94,10 +93,8 @@ const Cars: React.FC = () => {
             )}
 
             {cars.map((car: any, index: number) => {
-              const brandTitle = toTitle(car.brand);
-              const brandImage = toImageUrl(
-                car.brand?.image ?? car.brand?.logo ?? car.brand?.img
-              );
+              const brandTitle = toTitle(car?.brand?.title);
+              const brandImage =`https://asif7001.binarybards.online/${car.brand?.image}`
               const modelTitle = toTitle(car.model);
               const year = String(car.year || "-");
               const vin = car.vin || "-";
