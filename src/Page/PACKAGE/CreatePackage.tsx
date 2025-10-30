@@ -22,7 +22,6 @@ const CreatePackageForm = () => {
     register,
     control,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<PackageFormData>({
     defaultValues: {

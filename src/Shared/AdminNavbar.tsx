@@ -16,7 +16,6 @@ import { motion } from "framer-motion";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sidebarSlice";
-import { VscSignIn } from "react-icons/vsc";
 import { MdBrandingWatermark, MdWork, MdWorkHistory } from "react-icons/md";
 import type { RootState } from "../redux/store";
 
