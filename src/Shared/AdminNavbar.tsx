@@ -10,9 +10,10 @@ import {
   Sparkle,
   ChevronDown,
   ChevronUp,
+  Package,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sidebarSlice";
 import { VscSignIn } from "react-icons/vsc";
@@ -30,7 +31,13 @@ const AdminNavbar: React.FC = () => {
   const dispatch = useDispatch();
   const { isCollapsed } = useSelector((state: RootState) => state.sidebar);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(false);
+
+  // ✅ Store open state per dropdown
+  const [openDropdowns, setOpenDropdowns] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const location = useLocation();
 
   const menuItems: MenuItem[] = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
@@ -43,6 +50,14 @@ const AdminNavbar: React.FC = () => {
     { name: "Spare", icon: Sparkle, path: "/admin/Spare" },
     { name: "User Feedback", icon: MessageCircle, path: "/admin/message" },
     {
+      name: "Subscription",
+      icon: Package,
+      subItems: [
+        { name: "Package", path: "/admin/package" },
+        { name: "Subscription", path: "/admin/Subscription" },
+      ],
+    },
+    {
       name: "Setting",
       icon: Settings,
       subItems: [
@@ -54,7 +69,6 @@ const AdminNavbar: React.FC = () => {
       ],
     },
   ];
-
 
   const checkLoginStatus = () => {
     const token = localStorage.getItem("accessToken");
@@ -69,8 +83,7 @@ const AdminNavbar: React.FC = () => {
     };
 
     window.addEventListener("authChange", handleAuthChange);
-    
-    // Cleanup
+
     return () => {
       window.removeEventListener("authChange", handleAuthChange);
     };
@@ -79,10 +92,31 @@ const AdminNavbar: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    
-    window.dispatchEvent(new Event('authChange'));
+
+    window.dispatchEvent(new Event("authChange"));
     setIsLoggedIn(false);
-     window.location.reload();
+    window.location.reload();
+  };
+
+  const toggleDropdown = (name: string) => {
+    setOpenDropdowns((prev) => ({
+      ...prev,
+      [name]: !prev[name],
+    }));
+  };
+
+  // Check if dropdown should be open based on path or toggle state
+  const isDropdownOpen = (
+    name: string,
+    subItems?: { name: string; path: string }[]
+  ) => {
+    if (subItems) {
+      return (
+        openDropdowns[name] ||
+        subItems.some((sub) => sub.path === location.pathname)
+      );
+    }
+    return false;
   };
 
   return (
@@ -112,80 +146,83 @@ const AdminNavbar: React.FC = () => {
         animate={{ opacity: 1 }}
         className="flex-1 mt-4 space-y-1 overflow-y-auto"
       >
-        {menuItems.map(({ name, icon: Icon, path, subItems }) => (
-          <div key={name}>
-            {subItems ? (
-              <>
-                {/* Dropdown Parent */}
-                <button
-                  onClick={() => setOpenDropdown((prev) => !prev)}
-                  className={`flex items-center justify-between  w-full p-3 rounded-md transition-all ${
-                    openDropdown
-                      ? "bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 text-white font-bold"
-                      : "hover:bg-blue-700"
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <Icon size={20} />
-                    {!isCollapsed && <span className="ml-3">{name}</span>}
-                  </div>
-                  {!isCollapsed &&
-                    (openDropdown ? (
-                      <ChevronUp size={18} />
-                    ) : (
-                      <ChevronDown size={18} />
-                    ))}
-                </button>
+        {menuItems.map(({ name, icon: Icon, path, subItems }) => {
+          const open = isDropdownOpen(name, subItems);
 
-                {/* Dropdown Items */}
-                {openDropdown && !isCollapsed && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    className="ml-10 mt-1 space-y-1"
+          return (
+            <div key={name}>
+              {subItems ? (
+                <>
+                  {/* Dropdown Parent */}
+                  <button
+                    onClick={() => toggleDropdown(name)}
+                    className={`flex items-center justify-between w-full p-3 rounded-md transition-all ${
+                      open
+                        ? "bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 text-white font-bold"
+                        : "hover:bg-blue-700"
+                    }`}
                   >
-                    {subItems.map((sub) => (
-                      <NavLink
-                        key={sub.name}
-                        to={sub.path}
-                        className={({ isActive }) =>
-                          `block text-sm p-2 rounded-md transition-all ${
-                            isActive
-                              ? "bg-blue-600 font-semibold"
-                              : "hover:bg-blue-500"
-                          }`
-                        }
-                      >
-                        {sub.name}
-                      </NavLink>
-                    ))}
-                  </motion.div>
-                )}
-              </>
-            ) : (
-              // Normal menu item
-              <NavLink
-                to={path!}
-                className={({ isActive }) =>
-                  `flex items-center w-full p-3 rounded-md transition-all ${
-                    isActive
-                      ? "bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 font-bold text-white"
-                      : "hover:bg-blue-700"
-                  }`
-                }
-              >
-                <Icon size={20} />
-                {!isCollapsed && <span className="ml-3">{name}</span>}
-              </NavLink>
-            )}
-          </div>
-        ))}
+                    <div className="flex items-center">
+                      <Icon size={20} />
+                      {!isCollapsed && <span className="ml-3">{name}</span>}
+                    </div>
+                    {!isCollapsed &&
+                      (open ? (
+                        <ChevronUp size={18} />
+                      ) : (
+                        <ChevronDown size={18} />
+                      ))}
+                  </button>
+
+                  {/* Dropdown Items */}
+                  {open && !isCollapsed && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      className="ml-10 mt-1 space-y-1"
+                    >
+                      {subItems.map((sub) => (
+                        <NavLink
+                          key={sub.name}
+                          to={sub.path}
+                          className={({ isActive }) =>
+                            `block text-sm p-2 rounded-md transition-all ${
+                              isActive
+                                ? "bg-blue-600 font-semibold"
+                                : "hover:bg-blue-500"
+                            }`
+                          }
+                        >
+                          {sub.name}
+                        </NavLink>
+                      ))}
+                    </motion.div>
+                  )}
+                </>
+              ) : (
+                // Normal menu item
+                <NavLink
+                  to={path!}
+                  className={({ isActive }) =>
+                    `flex items-center w-full p-3 rounded-md transition-all ${
+                      isActive
+                        ? "bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 font-bold text-white"
+                        : "hover:bg-blue-700"
+                    }`
+                  }
+                >
+                  <Icon size={20} />
+                  {!isCollapsed && <span className="ml-3">{name}</span>}
+                </NavLink>
+              )}
+            </div>
+          );
+        })}
       </motion.div>
 
       {/* Footer */}
       <div className="p-4 border-t border-blue-400">
-        {isLoggedIn ? (
-          <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between">
             {!isCollapsed && (
               <div className="flex items-center space-x-3">
                 <img
@@ -206,6 +243,8 @@ const AdminNavbar: React.FC = () => {
               <LogOut size={20} />
             </button>
           </div>
+        {/* {isLoggedIn ? (
+          
         ) : (
           <Link
             to="/login"
@@ -214,7 +253,7 @@ const AdminNavbar: React.FC = () => {
             <p className="font-semibold">Login</p>
             <VscSignIn size={22} />
           </Link>
-        )}
+        )} */}
       </div>
     </div>
   );

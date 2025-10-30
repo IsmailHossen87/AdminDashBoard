@@ -2,15 +2,14 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute: React.FC = () => {
-  const token = localStorage.getItem("accessToken"); 
+  const token = localStorage.getItem("accessToken");
 
-
-  if (token) {
-    return <Outlet />;
+  if (!token) {
+    return <Navigate to="/login" replace />;
   }
 
-  // If token does not exist, redirect to login
-  return <Navigate to="/login" replace />;
+  // Login thakle dashboard ba nested routes dekhabe
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

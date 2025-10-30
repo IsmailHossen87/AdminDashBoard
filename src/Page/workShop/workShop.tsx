@@ -50,7 +50,6 @@ const WorkShop = () => {
 
     if (confirm.isConfirmed) {
       await deleteWorkShop(id).unwrap();
-      toast.success("Workshop deleted successfully!");
       refetch();
     }
   };

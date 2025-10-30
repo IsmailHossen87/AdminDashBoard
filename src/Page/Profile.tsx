@@ -30,7 +30,7 @@ const Profile: React.FC = () => {
     );
   }
 
-  const profile = data.data;
+  const profile = data.data; 
 
   const handleEdit = () => {
     setNationality(profile.nationality || "");
@@ -74,7 +74,7 @@ const Profile: React.FC = () => {
             </div>
           )}
 
-          {/* Edit Button */}
+      
           {!editMode && (
             <button
               onClick={handleEdit}
@@ -88,7 +88,7 @@ const Profile: React.FC = () => {
         <div className="mt-6 space-y-4 text-gray-700 dark:text-gray-300">
           {/* Email */}
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 text-white shadow-md">
+            <div className="p-3 rounded-full bg-linear-to-tr from-blue-500 via-purple-500 to-pink-500 text-white shadow-md">
               <Mail size={18} />
             </div>
             <span className="text-sm md:text-base">{profile.email}</span>
@@ -96,7 +96,7 @@ const Profile: React.FC = () => {
 
           {/* Phone */}
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-full bg-gradient-to-tr from-green-500 to-emerald-600 text-white shadow-md">
+            <div className="p-3 rounded-full bg-linear-to-tr from-green-500 to-emerald-600 text-white shadow-md">
               <Phone size={18} />
             </div>
             <span className="text-sm md:text-base">{profile.contact}</span>
@@ -104,7 +104,7 @@ const Profile: React.FC = () => {
 
           {/* Status */}
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 text-white shadow-md">
+            <div className="p-3 rounded-full bg-linear-to-tr from-indigo-500 to-purple-600 text-white shadow-md">
               <Shield size={18} />
             </div>
             <span className="text-sm md:text-base">

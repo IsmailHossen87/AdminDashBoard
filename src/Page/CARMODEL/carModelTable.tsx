@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 
 interface CarModel {
   _id: string;
-  brand: string;
+  brand: {title:string};
   title: string;
   isDeleted: boolean;
   createdAt: string;
@@ -74,7 +74,7 @@ console.log("CARMODEL",data);
               🚗 Car Models Management
             </h2>
 
-            <Link to="/model">
+            <Link to="/createPackage">
               <button className="px-5 py-2 flex items-center gap-2  bg-white text-indigo-600 font-semibold rounded-md hover:bg-indigo-50 transition-all shadow-md hover:shadow-lg">
                 <MdOutlineCreateNewFolder className="text-lg" />
                 Create Model
@@ -115,7 +115,7 @@ console.log("CARMODEL",data);
                           {carModel.title}
                         </td>
                         <td className="px-5 py-3 text-gray-700">
-                          {carModel.brand}
+                          {carModel.brand?.title}
                         </td>
                         <td className="px-5 py-3 text-gray-500">
                           {new Date(carModel.createdAt).toLocaleDateString()}

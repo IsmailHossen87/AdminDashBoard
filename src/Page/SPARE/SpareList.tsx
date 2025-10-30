@@ -103,7 +103,7 @@ const SparePartsList: React.FC = () => {
                 >
                   <td className="py-2 px-4 border text-center">{index + 1}</td>
 
-                  <td className="py-2 px-4 border">
+                  <td className="py-2 px-4 text-center border">
                     {item.itemName || item.title?.en || "N/A"}
                   </td>
                   <td className="py-2 px-4 border text-center">{item.code}</td>

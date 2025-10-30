@@ -10,7 +10,7 @@ import { useGetSingleImageQuery, useUpdateImageMutation } from "../../redux/feat
 interface FormData {
   title: string;
   description: string;
-  image: FileList | null;
+  image: string | undefined;
   type: string;
 }
 
