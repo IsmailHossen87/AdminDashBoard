@@ -58,7 +58,7 @@ console.log("CARMODEL",data);
 
   if (error)
     return (
-      <div className="text-center text-red-500 font-medium mt-6">
+      <div className="text-center text-5xl text-red-500 font-medium mt-6">
         Failed to load car models. Please try again later.
       </div>
     );

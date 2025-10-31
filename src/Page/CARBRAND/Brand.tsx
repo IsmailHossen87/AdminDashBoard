@@ -53,7 +53,7 @@ const CarBrandComponent: React.FC = () => {
 
   if (isError) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-red-500">
+      <div className="flex justify-center text-5xl items-center min-h-screen text-red-500">
         Failed to load brands ❌
       </div>
     );

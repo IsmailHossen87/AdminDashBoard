@@ -33,6 +33,9 @@ import PackageTable from "../Page/PACKAGE/AllPackage";
 import CreatePackageForm from "../Page/PACKAGE/CreatePackage";
 import AllSubscription from "../Page/PACKAGE/AllSubscription";
 import UpdatePackageForm from "../Page/PACKAGE/UpdatePackage";
+import CreateDiscount from "../Page/DISCOUNT/CreateDiscount";
+import CouponCards from "../Page/DISCOUNT/GetDiscount";
+import UpdateDiscount from "../Page/DISCOUNT/UpdateDisCount";
 
 const Routes = createBrowserRouter([
   {
@@ -41,13 +44,13 @@ const Routes = createBrowserRouter([
   },
   {
     path: "/",
-    element: <ProtectedRoute />, 
+    element: <ProtectedRoute />,
     errorElement: <ErrorPage />,
     children: [
       {
         element: <AdminLayout />,
         children: [
-          { index: true, element: <Dashboard /> }, 
+          { index: true, element: <Dashboard /> },
           { path: "admin/dashboard", element: <Dashboard /> },
           { path: "admin/profile", element: <Profile /> },
           { path: "admin/createAdmin", element: <CreateAdmin /> },
@@ -65,6 +68,10 @@ const Routes = createBrowserRouter([
           { path: "admin/Spare", element: <SparePartsList /> },
           { path: "admin/createSpare", element: <SpareFromOrFileUpload /> },
           { path: "admin/car", element: <Cars /> },
+          // DISCOUNT
+          { path: "admin/cupon", element: <CouponCards /> },
+          { path: "admin/createCupon", element: <CreateDiscount /> },
+          { path: "updateCoupon/:id", element: <UpdateDiscount /> },
           // Setting
           { path: "admin/privacy-policy", element: <PrivacyPolicy /> },
           { path: "admin/about-us", element: <AboutUs /> },
