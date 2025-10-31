@@ -53,7 +53,7 @@ const Cars: React.FC = () => {
 
   if (isError) {
     return (
-      <div className="text-red-500 text-center mt-10">
+      <div className="text-red-500 text-5xl text-center mt-10">
         Something went wrong while fetching cars.
       </div>
     );

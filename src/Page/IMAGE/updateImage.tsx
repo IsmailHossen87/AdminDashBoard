@@ -58,7 +58,7 @@ const { id } = useParams<{ id: string }>();
    await updateImage({ id: id as string, payload: updatedData }).unwrap();
 
 
-
+ 
       toast.success("Image updated successfully!");
       navigate("/admin/carmodel");
     } catch (error: any) {

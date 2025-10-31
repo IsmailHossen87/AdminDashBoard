@@ -38,7 +38,7 @@ const Dashboard = () => {
 
   if (isError || !DashBoard?.data) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-red-500">
+      <div className="flex justify-center items-center min-h-screen text-5xl text-red-500">
         Failed to load dashboard data ❌
       </div>
     );
