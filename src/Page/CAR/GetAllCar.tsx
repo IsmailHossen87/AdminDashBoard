@@ -76,7 +76,7 @@ const Cars: React.FC = () => {
               <th className="px-4 py-2 text-left">Brand</th>
               <th className="px-4 py-2 text-left">Model</th>
               <th className="px-4 py-2 text-left">Year</th>
-              <th className="px-4 py-2 text-left">VIN</th>
+              <th className="px-4 py-2 text-center">VIN</th>
               <th className="px-4 py-2 text-left">Client Name</th>
               <th className="px-4 py-2 text-left">Car Type</th>
               <th className="px-4 py-2 text-left">Plate Number</th>
@@ -128,7 +128,8 @@ const Cars: React.FC = () => {
 
                   <td className="px-4 py-2 text-left">{modelTitle}</td>
                   <td className="px-4 py-2 text-left">{year}</td>
-                  <td className="px-4 py-2 text-left">{vin}</td>
+                  <td className="px-4 py-2 text-center
+                  ">{vin}</td>
                   <td className="px-4 py-2 text-left">{clientName}</td>
                   <td className="px-4 py-2 text-left">{carType}</td>
                   <td className="px-4 py-2 text-left">{plateNumber}</td>

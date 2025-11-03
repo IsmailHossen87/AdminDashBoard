@@ -56,7 +56,7 @@ const Routes = createBrowserRouter([
           { path: "admin/createAdmin", element: <CreateAdmin /> },
           { path: "admin/message", element: <MessageList /> },
           { path: "admin/brand", element: <CarBrandComponent /> },
-          { path: "acountry", element: <CreateCountry /> },
+          { path: "country", element: <CreateCountry /> },
           { path: "admin/carmodel", element: <CarModelTable /> },
           { path: "admin/details/:id", element: <CarBrandDetail /> },
           { path: "admin/package", element: <PackageTable /> },

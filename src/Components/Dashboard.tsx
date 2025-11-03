@@ -20,12 +20,10 @@ const Dashboard = () => {
     isError,
   } = useGetDashBoardQuery(undefined);
   const { data: PersonalData } = useGetAllAdminQuery(undefined);
-
   const [searchTerm] = useState("");
-
-  // ✅ Single API for all & search
   const { data: allData } = useAllWorkShopQuery({ search: searchTerm });
-  console.log(allData?.data?.meta?.total);
+
+  console.log(DashBoard);
 
   if (isLoading) {
     return (

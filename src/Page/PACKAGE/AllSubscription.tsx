@@ -46,6 +46,7 @@ const AllSubscription = () => {
   const { data, isLoading, isError, refetch } = useGetAllSubscriptionQuery({
     search: searchTerm,
   });
+  console.log("Data",data);
 
   const subscriptions: Subscription[] = data?.data?.result || [];
   console.log(subscriptions);
