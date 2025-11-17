@@ -10,15 +10,18 @@ import { useGetSingleImageQuery, useUpdateImageMutation } from "../../redux/feat
 interface FormData {
   title: string;
   description: string;
-  image: string | undefined;
+  image: FileList | undefined;
   type: string;
 }
 
 const UpdateImage: React.FC = () => {
-const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const { data, isLoading: isFetching } = useGetSingleImageQuery(id);
+  // ✅ Skip query if id is undefined
+  const { data, isLoading: isFetching } = useGetSingleImageQuery(id!, {
+    skip: !id,
+  });
 
   const [updateImage, { isLoading, isSuccess, isError }] = useUpdateImageMutation();
 
@@ -39,6 +42,11 @@ const { id } = useParams<{ id: string }>();
   }, [data, setValue]);
 
   const onSubmit = async (formData: FormData) => {
+    if (!id) {
+      toast.error("Invalid image ID");
+      return;
+    }
+
     try {
       const updatedData = new FormData();
       updatedData.append(
@@ -54,17 +62,23 @@ const { id } = useParams<{ id: string }>();
         updatedData.append("image", formData.image[0]);
       }
 
-  
-   await updateImage({ id: id as string, payload: updatedData }).unwrap();
+      await updateImage({ id, payload: updatedData }).unwrap();
 
-
- 
       toast.success("Image updated successfully!");
       navigate("/admin/carmodel");
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to update image");
     }
   };
+
+  // ✅ Handle case when id is undefined
+  if (!id) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-lg font-semibold text-red-500">
+        Invalid image ID
+      </div>
+    );
+  }
 
   if (isFetching) {
     return (

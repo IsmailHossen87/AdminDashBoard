@@ -37,7 +37,7 @@ const AdminNavbar: React.FC = () => {
   }>({});
 
   const location = useLocation();
-
+console.log(isLoggedIn);
   const menuItems: MenuItem[] = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
     { name: "Profile", icon: User, path: "/admin/profile" },

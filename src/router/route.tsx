@@ -30,7 +30,6 @@ import SpareFromOrFileUpload from "../Page/SPARE/SpareHome";
 import SparePartsList from "../Page/SPARE/SpareList";
 import { CreateCountry } from "../Page/CARBRAND/CreateCountry";
 import PackageTable from "../Page/PACKAGE/AllPackage";
-import CreatePackageForm from "../Page/PACKAGE/CreatePackage";
 import AllSubscription from "../Page/PACKAGE/AllSubscription";
 import UpdatePackageForm from "../Page/PACKAGE/UpdatePackage";
 import CreateDiscount from "../Page/DISCOUNT/CreateDiscount";
@@ -78,8 +77,8 @@ const Routes = createBrowserRouter([
           { path: "admin/support", element: <Support /> },
           { path: "admin/service", element: <Service /> },
           { path: "admin/account-delete", element: <AccountDelete /> },
-          { path: "create", element: <CreateCarBrand /> },
-          { path: "package", element: <CreatePackageForm /> },
+          { path: "createCarBrand", element: <CreateCarBrand /> },
+          { path: "createCarmodel", element: <CreateCarModel /> },
           { path: "model", element: <CreateCarModel /> },
           { path: "imageType", element: <CreateCarImage /> },
           { path: "image/edit/:id", element: <UpdateImage /> },

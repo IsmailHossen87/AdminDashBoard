@@ -1,6 +1,5 @@
 import React from "react";
-import { useForm, Controller } from "react-hook-form";
-
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import {
   useCreateDiscountMutation,
@@ -28,7 +27,7 @@ const CreateDiscount: React.FC = () => {
   const navigate = useNavigate()
   const allPackage = AllPackage?.data?.packages;
 
-  const { register, handleSubmit, control, reset } = useForm<DiscountFormData>({
+  const { register, handleSubmit, reset } = useForm<DiscountFormData>({
     defaultValues: {
       code: "",
       package: "",
