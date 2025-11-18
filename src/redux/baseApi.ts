@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://asif7001.binarybards.online/api/v1', // Your base API URL
+  baseUrl: 'https://api.senaeya.net/api/v1', 
   prepareHeaders: (headers) => {
     // Set custom headers (e.g., ngrok-skip-browser-warning)
     headers.set("ngrok-skip-browser-warning", "true");
