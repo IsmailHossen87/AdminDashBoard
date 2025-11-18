@@ -16,7 +16,7 @@ import { motion } from "framer-motion";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../redux/sidebarSlice";
-import { MdBrandingWatermark, MdWork, MdWorkHistory } from "react-icons/md";
+import { MdBrandingWatermark, MdDiscount, MdWork, MdWorkHistory } from "react-icons/md";
 import type { RootState } from "../redux/store";
 
 interface MenuItem {
@@ -37,7 +37,7 @@ const AdminNavbar: React.FC = () => {
   }>({});
 
   const location = useLocation();
-
+console.log(isLoggedIn);
   const menuItems: MenuItem[] = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
     { name: "Profile", icon: User, path: "/admin/profile" },
@@ -47,6 +47,7 @@ const AdminNavbar: React.FC = () => {
     { name: "Workshop", icon: MdWorkHistory, path: "/admin/workShop" },
     { name: "Work", icon: MdWork, path: "/admin/workList" },
     { name: "Spare", icon: Sparkle, path: "/admin/Spare" },
+    { name: "Cupon", icon: MdDiscount, path: "/admin/cupon" },
     { name: "User Feedback", icon: MessageCircle, path: "/admin/message" },
     {
       name: "Subscription",

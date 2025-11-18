@@ -53,7 +53,7 @@ const Cars: React.FC = () => {
 
   if (isError) {
     return (
-      <div className="text-red-500 text-center mt-10">
+      <div className="text-red-500 text-5xl text-center mt-10">
         Something went wrong while fetching cars.
       </div>
     );
@@ -76,7 +76,7 @@ const Cars: React.FC = () => {
               <th className="px-4 py-2 text-left">Brand</th>
               <th className="px-4 py-2 text-left">Model</th>
               <th className="px-4 py-2 text-left">Year</th>
-              <th className="px-4 py-2 text-left">VIN</th>
+              <th className="px-4 py-2 text-center">VIN</th>
               <th className="px-4 py-2 text-left">Client Name</th>
               <th className="px-4 py-2 text-left">Car Type</th>
               <th className="px-4 py-2 text-left">Plate Number</th>
@@ -94,7 +94,7 @@ const Cars: React.FC = () => {
 
             {cars.map((car: any, index: number) => {
               const brandTitle = toTitle(car?.brand?.title);
-              const brandImage =`https://asif7001.binarybards.online/${car.brand?.image}`
+              const brandImage =`https://api.senaeya.net/${car.brand?.image}`
               const modelTitle = toTitle(car.model);
               const year = String(car.year || "-");
               const vin = car.vin || "-";
@@ -128,7 +128,8 @@ const Cars: React.FC = () => {
 
                   <td className="px-4 py-2 text-left">{modelTitle}</td>
                   <td className="px-4 py-2 text-left">{year}</td>
-                  <td className="px-4 py-2 text-left">{vin}</td>
+                  <td className="px-4 py-2 text-center
+                  ">{vin}</td>
                   <td className="px-4 py-2 text-left">{clientName}</td>
                   <td className="px-4 py-2 text-left">{carType}</td>
                   <td className="px-4 py-2 text-left">{plateNumber}</td>
